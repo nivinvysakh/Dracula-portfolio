@@ -118,23 +118,37 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
       <!-- Spotify Track Details -->
       <div id="spotify-content" class="flex items-center gap-3">
         <div class="relative group flex-shrink-0">
-          <img
-            id="spotify-album-art"
-            src="https://i.scdn.co/image/ab67616d0000b2738b52c67b93a02796e626e2e2"
-            alt="Album Art"
-            width="48"
-            height="48"
-            loading="lazy"
-            decoding="async"
-            class="w-12 h-12 rounded-lg object-cover border border-dracula-selection/40"
-          />
+          <a
+            id="spotify-album-link"
+            href="https://open.spotify.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open on Spotify"
+          >
+            <img
+              id="spotify-album-art"
+              src="https://i.scdn.co/image/ab67616d0000b2738b52c67b93a02796e626e2e2"
+              alt="Album Art"
+              width="48"
+              height="48"
+              loading="lazy"
+              decoding="async"
+              class="w-12 h-12 rounded-lg object-cover border border-dracula-selection/40 group-hover:opacity-80 transition-opacity"
+            />
+          </a>
         </div>
         <div class="min-w-0 flex-1">
-          <h4
-            id="spotify-song"
-            class="font-mono text-xs font-bold text-dracula-fg truncate hover:text-dracula-green transition-colors"
-          >
-            Not Listening
+          <h4 class="font-mono text-xs font-bold text-dracula-fg truncate">
+            <a
+              id="spotify-song"
+              href="https://open.spotify.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-dracula-green transition-colors hover:underline inline-block truncate max-w-full"
+              title="Listen on Spotify"
+            >
+              Not Listening
+            </a>
           </h4>
           <p
             id="spotify-artist"
@@ -310,7 +324,8 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
     const customStatusEl = document.getElementById("lanyard-custom-status");
 
     // Spotify Elements
-    const spotifySongEl = document.getElementById("spotify-song");
+    const spotifySongEl = document.getElementById("spotify-song") as HTMLAnchorElement;
+    const spotifyAlbumLinkEl = document.getElementById("spotify-album-link") as HTMLAnchorElement;
     const spotifyArtistEl = document.getElementById("spotify-artist");
     const spotifyAlbumEl = document.getElementById("spotify-album");
     const spotifyAlbumArtEl = document.getElementById(
@@ -342,6 +357,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
       artist: string;
       album: string;
       album_art_url: string;
+      track_id?: string;
     }) {
       try {
         const value = JSON.stringify(songData);
@@ -357,6 +373,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
       artist: string;
       album: string;
       album_art_url: string;
+      track_id?: string;
     } | null {
       try {
         const nameEQ = COOKIE_NAME + "=";
@@ -443,6 +460,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
           artist: data.spotify.artist,
           album: data.spotify.album,
           album_art_url: data.spotify.album_art_url,
+          track_id: data.spotify.track_id,
         });
 
         // Set Live UI
@@ -464,7 +482,19 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
           spotifyEqualizerEl.className =
             "flex items-end gap-[2px] h-4 opacity-100";
 
-        if (spotifySongEl) spotifySongEl.textContent = data.spotify.song;
+        const spotifyUrl = data.spotify.track_id
+          ? `https://open.spotify.com/track/${data.spotify.track_id}`
+          : `https://open.spotify.com/search/${encodeURIComponent(data.spotify.song + " " + data.spotify.artist)}`;
+
+        if (spotifySongEl) {
+          spotifySongEl.textContent = data.spotify.song;
+          spotifySongEl.href = spotifyUrl;
+          spotifySongEl.title = `Listen to "${data.spotify.song}" on Spotify`;
+        }
+        if (spotifyAlbumLinkEl) {
+          spotifyAlbumLinkEl.href = spotifyUrl;
+          spotifyAlbumLinkEl.title = `Listen to "${data.spotify.song}" on Spotify`;
+        }
         if (spotifyArtistEl) spotifyArtistEl.textContent = data.spotify.artist;
         if (spotifyAlbumEl)
           spotifyAlbumEl.textContent = `Album: ${data.spotify.album}`;
@@ -496,7 +526,19 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
             spotifyEqualizerEl.className =
               "flex items-end gap-[2px] h-4 opacity-70";
 
-          if (spotifySongEl) spotifySongEl.textContent = lastPlayed.song;
+          const spotifyUrl = lastPlayed.track_id
+            ? `https://open.spotify.com/track/${lastPlayed.track_id}`
+            : `https://open.spotify.com/search/${encodeURIComponent(lastPlayed.song + " " + lastPlayed.artist)}`;
+
+          if (spotifySongEl) {
+            spotifySongEl.textContent = lastPlayed.song;
+            spotifySongEl.href = spotifyUrl;
+            spotifySongEl.title = `Listen to "${lastPlayed.song}" on Spotify`;
+          }
+          if (spotifyAlbumLinkEl) {
+            spotifyAlbumLinkEl.href = spotifyUrl;
+            spotifyAlbumLinkEl.title = `Listen to "${lastPlayed.song}" on Spotify`;
+          }
           if (spotifyArtistEl) spotifyArtistEl.textContent = lastPlayed.artist;
           if (spotifyAlbumEl)
             spotifyAlbumEl.textContent = `Album: ${lastPlayed.album}`;
@@ -526,7 +568,15 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
             spotifyEqualizerEl.className =
               "flex items-end gap-[2px] h-4 opacity-40";
 
-          if (spotifySongEl) spotifySongEl.textContent = "Not Listening";
+          if (spotifySongEl) {
+            spotifySongEl.textContent = "Not Listening";
+            spotifySongEl.href = "https://open.spotify.com";
+            spotifySongEl.title = "Open Spotify";
+          }
+          if (spotifyAlbumLinkEl) {
+            spotifyAlbumLinkEl.href = "https://open.spotify.com";
+            spotifyAlbumLinkEl.title = "Open Spotify";
+          }
           if (spotifyArtistEl) spotifyArtistEl.textContent = "Spotify Offline";
           if (spotifyAlbumEl) spotifyAlbumEl.textContent = "—";
           if (spotifyTimeElapsedEl) spotifyTimeElapsedEl.textContent = "0:00";
