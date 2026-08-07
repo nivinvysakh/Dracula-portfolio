@@ -13,19 +13,19 @@ const { username = SITE_CONFIG.name } = Astro.props;
   data-username={username}
   class="dracula-glass rounded-xl p-5 border border-dracula-selection/30 my-6"
 >
-  <div class="flex items-center justify-between mb-4">
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
     <div class="flex items-center gap-2">
-      <span class="w-2 h-2 rounded-full bg-dracula-pink animate-pulse"></span>
+      <span class="w-2 h-2 rounded-full bg-dracula-pink animate-pulse flex-shrink-0"></span>
       <h4 class="font-mono text-xs font-bold text-dracula-fg">
         Nivin's Contribution Graph
       </h4>
     </div>
     <div
-      class="flex items-center gap-3 font-mono text-[10px] text-dracula-comment"
+      class="flex items-center gap-2 sm:gap-3 font-mono text-[10px] text-dracula-comment"
     >
       <span
         id="total-commits-badge"
-        class="px-2 py-0.5 rounded bg-dracula-bgDarker text-dracula-cyan border border-dracula-selection/40"
+        class="px-2 py-0.5 rounded bg-dracula-bgDarker text-dracula-cyan border border-dracula-selection/40 flex-shrink-0"
       >
         Live GitHub Data
       </span>
@@ -33,7 +33,7 @@ const { username = SITE_CONFIG.name } = Astro.props;
         href={`https://github.com/${username}`}
         target="_blank"
         rel="noopener noreferrer"
-        class="hover:text-dracula-pink transition-colors underline"
+        class="hidden sm:inline-flex hover:text-dracula-pink transition-colors underline"
       >
         @{username}
       </a>
