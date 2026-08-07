@@ -1,0 +1,51 @@
+---
+import { SITE_CONFIG } from "../config";
+---
+
+<footer
+  class="mt-auto border-t border-dracula-selection/30 bg-dracula-bgDarker py-6 font-mono text-xs text-dracula-comment"
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-4">
+    <!-- Top Row: Footer Info & Clock -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div>
+        <span class="text-dracula-fg font-semibold"
+          >&copy; {new Date().getFullYear()} {SITE_CONFIG.name}</span
+        >
+      </div>
+
+      <div class="flex items-center gap-2 text-[11px]">
+        <span>Astro</span> &bull; <span>Tailwind</span>
+      </div>
+
+      <div class="flex items-center gap-1.5 text-[11px]">
+        <span class="w-1.5 h-1.5 rounded-full bg-dracula-green animate-pulse"
+        ></span>
+        <span id="footer-live-clock">00:00:00 UTC</span>
+      </div>
+    </div>
+
+    <!-- Bottom Kaomoji Signatures matching GitHub README -->
+    <div
+      class="flex items-center justify-between pt-3 border-t border-dracula-selection/20 text-xs font-mono text-dracula-comment"
+    >
+      <span>🏍️🏁 (⌐■_■)</span>
+      <span>✨🌟 (～￣▽￣)～</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function updateClock() {
+    const clockEl = document.getElementById("footer-live-clock");
+    if (!clockEl) return;
+    const now = new Date();
+    clockEl.textContent = now.toLocaleTimeString("en-US", {
+      hour12: true,
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+</script>

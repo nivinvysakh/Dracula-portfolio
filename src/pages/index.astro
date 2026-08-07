@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import ContributionGraph from '../components/ContributionGraph.astro';
+import LanyardWidget from '../components/LanyardWidget.astro';
+import Skills from '../components/Skills.astro';
+import Collab from '../components/Collab.astro';
+import Connect from '../components/Connect.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_CONFIG } from '../config';
+---
+
+<Layout>
+  <Navbar />
+  
+  <main class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8 overflow-x-hidden">
+    <!-- Main GitHub README Profile Card -->
+    <Hero />
+
+    <!-- Automation Pipeline & Contribution Analytics -->
+    <div class="space-y-6">
+      <div class="flex items-center justify-between font-mono text-xs text-dracula-comment border-b border-dracula-selection/40 pb-2">
+        <span class="flex items-center gap-2 font-bold text-dracula-fg text-sm">
+          🚀 Automation Pipeline (Recent Activity)
+        </span>
+        <span class="text-[11px] text-dracula-cyan">Live Sync</span>
+      </div>
+
+      <ContributionGraph />
+
+      <LanyardWidget discordId={SITE_CONFIG.discordId} />
+    </div>
+
+    <Skills />
+    <Collab />
+    <Connect />
+  </main>
+
+  <Footer />
+</Layout>

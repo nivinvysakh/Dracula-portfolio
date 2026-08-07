@@ -1,0 +1,55 @@
+---
+import "../styles/global.css";
+import { SITE_CONFIG } from "../config";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = "Nivin", description = SITE_CONFIG.description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth overflow-x-hidden w-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#282a36" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Nivin" />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="bg-dracula-bg text-dracula-fg antialiased selection:bg-dracula-selection selection:text-dracula-pink relative min-h-screen flex flex-col overflow-x-hidden w-full max-w-full"
+  >
+    <!-- Subtle Background Glow Orbs -->
+    <div
+      class="fixed top-0 left-1/4 w-96 h-96 bg-dracula-purple/10 rounded-full blur-[120px] pointer-events-none -z-10"
+    >
+    </div>
+    <div
+      class="fixed bottom-0 right-1/4 w-96 h-96 bg-dracula-cyan/10 rounded-full blur-[120px] pointer-events-none -z-10"
+    >
+    </div>
+
+    <slot />
+  </body>
+</html>

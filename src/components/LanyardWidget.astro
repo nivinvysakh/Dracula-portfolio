@@ -1,0 +1,715 @@
+---
+import { SITE_CONFIG } from "../config";
+import Image from "astro/components/Image.astro";
+
+interface Props {
+  discordId?: string;
+}
+
+const { discordId = SITE_CONFIG.discordId } = Astro.props;
+---
+
+<div
+  id="lanyard-container"
+  data-discord-id={discordId}
+  data-avatar-url={SITE_CONFIG.avatarUrl}
+  class="dracula-card rounded-2xl p-5 sm:p-6 w-full relative overflow-hidden transition-all duration-300 border border-dracula-selection/40 shadow-xl"
+>
+  <!-- Widget Top Bar / User Status Header -->
+  <div
+    class="flex items-center justify-between border-b border-dracula-selection/30 pb-3.5 mb-4"
+  >
+    <div class="flex items-center gap-3">
+      <!-- Avatar with Status Dot -->
+      <div class="relative">
+        <Image
+          id="lanyard-avatar"
+          src={SITE_CONFIG.avatarUrl}
+          alt="Profile Avatar"
+          width={40}
+          height={40}
+          decoding="async"
+          class="w-10 h-10 rounded-full border border-dracula-purple/50 bg-dracula-bgDarker object-cover shadow-sm"
+        />
+        <span
+          id="lanyard-status-dot"
+          class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-dracula-comment border-2 border-dracula-card transition-colors duration-300"
+          title="Status: Offline"></span>
+      </div>
+
+      <!-- Username & Status Text -->
+      <div>
+        <div class="flex items-center gap-2">
+          <h3
+            id="lanyard-username"
+            class="font-mono text-sm font-bold text-dracula-fg tracking-tight"
+          >
+            {SITE_CONFIG.name}
+          </h3>
+          <span
+            id="lanyard-status-text"
+            class="text-[9px] font-mono uppercase font-semibold px-1.5 py-0.5 rounded bg-dracula-selection/60 text-dracula-comment"
+          >
+            OFFLINE
+          </span>
+        </div>
+        <p
+          id="lanyard-custom-status"
+          class="text-[11px] font-mono text-dracula-comment truncate max-w-[200px] sm:max-w-[260px]"
+        >
+          Connecting live presence...
+        </p>
+      </div>
+    </div>
+
+    <!-- Live Indicator Badge -->
+    <div
+      class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-dracula-bgDarker border border-dracula-selection/40 text-[10px] font-mono text-dracula-cyan"
+    >
+      <span class="w-1.5 h-1.5 rounded-full bg-dracula-cyan animate-pulse"
+      ></span>
+      <span>Discord Live RPC</span>
+    </div>
+  </div>
+
+  <!-- Content Grid: Spotify & Game Activity -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <!-- Spotify Live Card -->
+    <div
+      id="spotify-card"
+      class="dracula-glass rounded-xl p-3.5 border border-dracula-selection/30 flex flex-col justify-between relative overflow-hidden transition-all duration-300"
+    >
+      <div class="flex items-center justify-between mb-2.5">
+        <div
+          id="spotify-status-header"
+          class="flex items-center gap-1.5 text-dracula-green font-mono text-[11px] font-bold"
+        >
+          <!-- Equalizer Icon -->
+          <div
+            id="spotify-equalizer"
+            class="flex items-end gap-[2px] h-3.5 opacity-100"
+          >
+            <span
+              id="eq-bar-1"
+              class="w-0.5 bg-dracula-green rounded-full animate-equalizer-1"
+            ></span>
+            <span
+              id="eq-bar-2"
+              class="w-0.5 bg-dracula-green rounded-full animate-equalizer-2"
+            ></span>
+            <span
+              id="eq-bar-3"
+              class="w-0.5 bg-dracula-green rounded-full animate-equalizer-3"
+            ></span>
+          </div>
+          <span id="spotify-header-label">NOW PLAYING</span>
+        </div>
+        <svg
+          class="w-4 h-4 text-dracula-green"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm5.521 17.341c-.219.359-.692.472-1.05.253-2.879-1.758-6.498-2.155-10.76-1.18-.406.094-.813-.162-.906-.569-.094-.406.162-.813.569-.906 4.656-1.062 8.656-.609 11.891 1.36.359.218.472.691.256 1.042zm1.48-3.295c-.276.438-.853.584-1.291.308-3.297-2.023-8.324-2.612-12.227-1.427-.492.149-1.011-.137-1.16-.629-.149-.492.137-1.011.629-1.16 4.46-1.353 9.992-.7 13.74 1.6.438.276.584.853.309 1.291zm.145-3.468C15.228 8.24 8.78 8.026 5.02 9.167c-.613.186-1.26-.168-1.446-.781-.186-.613.168-1.26.781-1.446 4.318-1.31 11.432-1.06 15.932 1.61.551.328.736 1.036.408 1.587-.328.552-1.035.737-1.586.408z"
+          ></path>
+        </svg>
+      </div>
+
+      <!-- Spotify Track Details -->
+      <div id="spotify-content" class="flex items-center gap-3">
+        <div class="relative group flex-shrink-0">
+          <Image
+            id="spotify-album-art"
+            src="https://i.scdn.co/image/ab67616d0000b2738b52c67b93a02796e626e2e2"
+            alt="Album Art"
+            width="48"
+            height="48"
+            loading="lazy"
+            decoding="async"
+            class="w-12 h-12 rounded-lg object-cover border border-dracula-selection/40"
+          />
+        </div>
+        <div class="min-w-0 flex-1">
+          <h4
+            id="spotify-song"
+            class="font-mono text-xs font-bold text-dracula-fg truncate hover:text-dracula-green transition-colors"
+          >
+            Not Listening
+          </h4>
+          <p
+            id="spotify-artist"
+            class="text-[11px] font-mono text-dracula-comment truncate"
+          >
+            Spotify Offline
+          </p>
+          <p
+            id="spotify-album"
+            class="text-[10px] font-mono text-dracula-purple/80 truncate"
+          >
+            —
+          </p>
+        </div>
+      </div>
+
+      <!-- Spotify Progress Bar -->
+      <div
+        id="spotify-progress-container"
+        class="mt-2.5 pt-1.5 border-t border-dracula-selection/30"
+      >
+        <div
+          class="flex justify-between text-[9px] font-mono text-dracula-comment mb-1"
+        >
+          <span id="spotify-time-elapsed">0:00</span>
+          <span id="spotify-time-total">0:00</span>
+        </div>
+        <div
+          class="w-full h-1 bg-dracula-bgDarker rounded-full overflow-hidden"
+        >
+          <div
+            id="spotify-progress-bar"
+            class="h-full bg-dracula-green rounded-full transition-all duration-300 w-0"
+          >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game / Rich Presence Card -->
+    <div
+      id="game-card"
+      class="dracula-glass rounded-xl p-3.5 border border-dracula-selection/30 flex flex-col justify-between relative overflow-hidden transition-all duration-300"
+    >
+      <div class="flex items-center justify-between mb-2.5">
+        <div
+          class="flex items-center gap-1.5 text-dracula-purple font-mono text-[11px] font-bold"
+        >
+          <svg
+            class="w-3.5 h-3.5 text-dracula-purple"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 002-2H5zM5 19a2 2 0 00-2 2v1a2 2 0 002 2h14a2 2 0 002-2v-1a2 2 0 00-2-2H5z"
+            ></path>
+          </svg>
+          <span id="game-card-title">GAMING & ACTIVITY</span>
+        </div>
+        <span
+          id="game-status-badge"
+          class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-dracula-selection/60 text-dracula-orange"
+        >
+          IDLE
+        </span>
+      </div>
+
+      <!-- Game Details -->
+      <div id="game-content" class="flex items-center gap-3">
+        <div
+          class="relative flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-dracula-bgDarker border border-dracula-selection/40 flex items-center justify-center"
+        >
+          <div
+            id="game-icon-fallback"
+            class="w-full h-full flex items-center justify-center text-dracula-purple p-2"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </div>
+          <img
+            id="game-icon"
+            src=""
+            alt="Game Icon"
+            width="48"
+            height="48"
+            loading="lazy"
+            decoding="async"
+            class="w-full h-full object-cover hidden rounded-lg"
+          />
+        </div>
+
+        <div class="min-w-0 flex-1">
+          <h4
+            id="game-name"
+            class="font-mono text-sm font-bold text-dracula-fg truncate"
+          >
+            Visual Studio Code
+          </h4>
+          <p
+            id="game-details"
+            class="text-xs font-mono text-dracula-comment truncate"
+          >
+            Editing PortfolioWebsite
+          </p>
+          <p
+            id="game-state"
+            class="text-[11px] font-mono text-dracula-cyan/80 truncate mt-0.5"
+          >
+            Building with Astro & Tailwind
+          </p>
+        </div>
+      </div>
+
+      <!-- Elapsed Time Footer -->
+      <div
+        class="mt-3 pt-2 border-t border-dracula-selection/40 flex items-center justify-between text-[11px] font-mono text-dracula-comment"
+      >
+        <span class="flex items-center gap-1">
+          <svg
+            class="w-3.5 h-3.5 text-dracula-yellow"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span id="game-elapsed">Elapsed: 34m 12s</span>
+        </span>
+        <span id="game-app-tag" class="text-[10px] text-dracula-pink"
+          >Rich Presence</span
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Lanyard WebSocket & REST Integration script
+  const container = document.getElementById("lanyard-container");
+  if (container) {
+    const discordId =
+      container.getAttribute("data-discord-id") || "957196694393614367";
+    const fallbackAvatar =
+      container.getAttribute("data-avatar-url") ||
+      "https://github.com/nivinvysakh.png";
+
+    // UI Elements
+    const avatarEl = document.getElementById(
+      "lanyard-avatar",
+    ) as HTMLImageElement;
+    const statusDotEl = document.getElementById("lanyard-status-dot");
+    const usernameEl = document.getElementById("lanyard-username");
+    const statusTextEl = document.getElementById("lanyard-status-text");
+    const customStatusEl = document.getElementById("lanyard-custom-status");
+
+    // Spotify Elements
+    const spotifySongEl = document.getElementById("spotify-song");
+    const spotifyArtistEl = document.getElementById("spotify-artist");
+    const spotifyAlbumEl = document.getElementById("spotify-album");
+    const spotifyAlbumArtEl = document.getElementById(
+      "spotify-album-art",
+    ) as HTMLImageElement;
+    const spotifyTimeElapsedEl = document.getElementById(
+      "spotify-time-elapsed",
+    );
+    const spotifyTimeTotalEl = document.getElementById("spotify-time-total");
+    const spotifyProgressBarEl = document.getElementById(
+      "spotify-progress-bar",
+    );
+    const spotifyHeaderLabelEl = document.getElementById(
+      "spotify-header-label",
+    );
+    const spotifyStatusHeaderEl = document.getElementById(
+      "spotify-status-header",
+    );
+    const spotifyEqualizerEl = document.getElementById("spotify-equalizer");
+    const eqBar1 = document.getElementById("eq-bar-1");
+    const eqBar2 = document.getElementById("eq-bar-2");
+    const eqBar3 = document.getElementById("eq-bar-3");
+
+    // Cookie & Storage Utilities for Last Played Song
+    const COOKIE_NAME = "last_played_spotify";
+
+    function setLastPlayedCookie(songData: {
+      song: string;
+      artist: string;
+      album: string;
+      album_art_url: string;
+    }) {
+      try {
+        const value = JSON.stringify(songData);
+        const date = new Date();
+        date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
+        document.cookie = `${COOKIE_NAME}=${encodeURIComponent(value)}; expires=${date.toUTCString()}; path=/; SameSite=Lax`;
+        localStorage.setItem(COOKIE_NAME, value);
+      } catch (e) {}
+    }
+
+    function getLastPlayedCookie(): {
+      song: string;
+      artist: string;
+      album: string;
+      album_art_url: string;
+    } | null {
+      try {
+        const nameEQ = COOKIE_NAME + "=";
+        const ca = document.cookie.split(";");
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i].trim();
+          if (c.indexOf(nameEQ) === 0) {
+            return JSON.parse(decodeURIComponent(c.substring(nameEQ.length)));
+          }
+        }
+        const stored = localStorage.getItem(COOKIE_NAME);
+        if (stored) return JSON.parse(stored);
+      } catch (e) {}
+      return null;
+    }
+
+    // Game Elements
+    const gameNameEl = document.getElementById("game-name");
+    const gameDetailsEl = document.getElementById("game-details");
+    const gameStateEl = document.getElementById("game-state");
+    const gameElapsedEl = document.getElementById("game-elapsed");
+    const gameStatusBadgeEl = document.getElementById("game-status-badge");
+    const gameIconEl = document.getElementById("game-icon") as HTMLImageElement;
+    const gameIconFallbackEl = document.getElementById("game-icon-fallback");
+
+    let ws: WebSocket | null = null;
+    let heartbeatInterval: any = null;
+    let spotifyInterval: any = null;
+    let currentSpotifyData: any = null;
+
+    // Color definitions for status
+    const STATUS_COLORS: Record<
+      string,
+      { bg: string; text: string; name: string }
+    > = {
+      online: { bg: "#50fa7b", text: "#282a36", name: "ONLINE" },
+      idle: { bg: "#ffb86c", text: "#282a36", name: "IDLE" },
+      dnd: { bg: "#ff5555", text: "#f8f8f2", name: "DND" },
+      offline: { bg: "#6272a4", text: "#f8f8f2", name: "OFFLINE" },
+    };
+
+    function updateUI(data: any) {
+      if (!data) return;
+
+      // 1. User Avatar & Discord Status
+      const status = data.discord_status || "offline";
+      const statusConfig = STATUS_COLORS[status] || STATUS_COLORS.offline;
+
+      if (statusDotEl) {
+        statusDotEl.style.backgroundColor = statusConfig.bg;
+        statusDotEl.title = `Status: ${statusConfig.name}`;
+      }
+
+      if (statusTextEl) {
+        statusTextEl.textContent = statusConfig.name;
+        statusTextEl.style.backgroundColor = statusConfig.bg;
+        statusTextEl.style.color = statusConfig.text;
+      }
+
+      if (data.discord_user) {
+        if (usernameEl)
+          usernameEl.textContent =
+            data.discord_user.global_name || data.discord_user.username;
+        if (avatarEl && fallbackAvatar) {
+          avatarEl.src = fallbackAvatar;
+        }
+      }
+
+      // Custom Status
+      const customAct = data.activities?.find((a: any) => a.type === 4);
+      if (customStatusEl) {
+        customStatusEl.textContent =
+          customAct?.state ||
+          (status === "online" ? "Active on Discord" : "Away from Keyboard");
+      }
+
+      // 2. Spotify Live vs Last Played Track
+      if (data.spotify) {
+        currentSpotifyData = data.spotify;
+
+        // Save to cookie for last played persistence
+        setLastPlayedCookie({
+          song: data.spotify.song,
+          artist: data.spotify.artist,
+          album: data.spotify.album,
+          album_art_url: data.spotify.album_art_url,
+        });
+
+        // Set Live UI
+        if (spotifyHeaderLabelEl)
+          spotifyHeaderLabelEl.textContent = "NOW PLAYING";
+        if (spotifyStatusHeaderEl)
+          spotifyStatusHeaderEl.className =
+            "flex items-center gap-2 text-dracula-green font-mono text-xs font-bold";
+        if (eqBar1)
+          eqBar1.className =
+            "w-1 bg-dracula-green rounded-full animate-equalizer-1";
+        if (eqBar2)
+          eqBar2.className =
+            "w-1 bg-dracula-green rounded-full animate-equalizer-2";
+        if (eqBar3)
+          eqBar3.className =
+            "w-1 bg-dracula-green rounded-full animate-equalizer-3";
+        if (spotifyEqualizerEl)
+          spotifyEqualizerEl.className =
+            "flex items-end gap-[2px] h-4 opacity-100";
+
+        if (spotifySongEl) spotifySongEl.textContent = data.spotify.song;
+        if (spotifyArtistEl) spotifyArtistEl.textContent = data.spotify.artist;
+        if (spotifyAlbumEl)
+          spotifyAlbumEl.textContent = `Album: ${data.spotify.album}`;
+        if (spotifyAlbumArtEl)
+          spotifyAlbumArtEl.src = data.spotify.album_art_url;
+        startSpotifyTimer();
+      } else {
+        currentSpotifyData = null;
+        if (spotifyInterval) clearInterval(spotifyInterval);
+
+        const lastPlayed = getLastPlayedCookie();
+        if (lastPlayed) {
+          // Display Last Played Song from Cookie
+          if (spotifyHeaderLabelEl)
+            spotifyHeaderLabelEl.textContent = "LAST PLAYED SONG";
+          if (spotifyStatusHeaderEl)
+            spotifyStatusHeaderEl.className =
+              "flex items-center gap-2 text-dracula-orange font-mono text-xs font-bold";
+          if (eqBar1)
+            eqBar1.className =
+              "w-1 h-2 bg-dracula-orange rounded-full opacity-60";
+          if (eqBar2)
+            eqBar2.className =
+              "w-1 h-3.5 bg-dracula-orange rounded-full opacity-60";
+          if (eqBar3)
+            eqBar3.className =
+              "w-1 h-2.5 bg-dracula-orange rounded-full opacity-60";
+          if (spotifyEqualizerEl)
+            spotifyEqualizerEl.className =
+              "flex items-end gap-[2px] h-4 opacity-70";
+
+          if (spotifySongEl) spotifySongEl.textContent = lastPlayed.song;
+          if (spotifyArtistEl) spotifyArtistEl.textContent = lastPlayed.artist;
+          if (spotifyAlbumEl)
+            spotifyAlbumEl.textContent = `Album: ${lastPlayed.album}`;
+          if (spotifyAlbumArtEl)
+            spotifyAlbumArtEl.src = lastPlayed.album_art_url;
+          if (spotifyTimeElapsedEl) spotifyTimeElapsedEl.textContent = "0:00";
+          if (spotifyTimeTotalEl)
+            spotifyTimeTotalEl.textContent = "Last Played";
+          if (spotifyProgressBarEl) spotifyProgressBarEl.style.width = "100%";
+        } else {
+          // Spotify Offline
+          if (spotifyHeaderLabelEl)
+            spotifyHeaderLabelEl.textContent = "SPOTIFY OFFLINE";
+          if (spotifyStatusHeaderEl)
+            spotifyStatusHeaderEl.className =
+              "flex items-center gap-2 text-dracula-comment font-mono text-xs font-bold";
+          if (eqBar1)
+            eqBar1.className =
+              "w-1 h-1 bg-dracula-comment rounded-full opacity-40";
+          if (eqBar2)
+            eqBar2.className =
+              "w-1 h-1 bg-dracula-comment rounded-full opacity-40";
+          if (eqBar3)
+            eqBar3.className =
+              "w-1 h-1 bg-dracula-comment rounded-full opacity-40";
+          if (spotifyEqualizerEl)
+            spotifyEqualizerEl.className =
+              "flex items-end gap-[2px] h-4 opacity-40";
+
+          if (spotifySongEl) spotifySongEl.textContent = "Not Listening";
+          if (spotifyArtistEl) spotifyArtistEl.textContent = "Spotify Offline";
+          if (spotifyAlbumEl) spotifyAlbumEl.textContent = "—";
+          if (spotifyTimeElapsedEl) spotifyTimeElapsedEl.textContent = "0:00";
+          if (spotifyTimeTotalEl) spotifyTimeTotalEl.textContent = "0:00";
+          if (spotifyProgressBarEl) spotifyProgressBarEl.style.width = "0%";
+        }
+      }
+
+      // 3. Game Playing / Activity Presence
+      const gameAct = data.activities?.find((a: any) => a.type === 0);
+      if (gameAct) {
+        if (gameNameEl) gameNameEl.textContent = gameAct.name;
+        if (gameDetailsEl)
+          gameDetailsEl.textContent =
+            gameAct.details || "In Game / Application";
+        if (gameStateEl)
+          gameStateEl.textContent = gameAct.state || "Active Session";
+        if (gameStatusBadgeEl) {
+          gameStatusBadgeEl.textContent = "PLAYING";
+          gameStatusBadgeEl.className =
+            "text-[10px] font-mono px-2 py-0.5 rounded bg-dracula-purple/20 text-dracula-purple font-bold";
+        }
+
+        // Elapsed time
+        if (gameAct.timestamps?.start && gameElapsedEl) {
+          const elapsedMs = Date.now() - gameAct.timestamps.start;
+          const mins = Math.floor(elapsedMs / 60000);
+          const hrs = Math.floor(mins / 60);
+          const displayMins = mins % 60;
+          gameElapsedEl.textContent =
+            hrs > 0
+              ? `Elapsed: ${hrs}h ${displayMins}m`
+              : `Elapsed: ${displayMins}m`;
+        }
+
+        // Icon handling: use Discord RPC asset if available, otherwise show default fallback icon
+        if (gameIconEl && gameIconFallbackEl) {
+          gameIconEl.onerror = () => {
+            gameIconEl.classList.add("hidden");
+            gameIconFallbackEl.classList.remove("hidden");
+          };
+
+          const discordAssetUrl = parseDiscordAssetUrl(
+            gameAct.assets,
+            gameAct.application_id,
+          );
+          if (discordAssetUrl) {
+            gameIconEl.src = discordAssetUrl;
+            gameIconEl.classList.remove("hidden");
+            gameIconFallbackEl.classList.add("hidden");
+          } else {
+            gameIconEl.classList.add("hidden");
+            gameIconFallbackEl.classList.remove("hidden");
+          }
+        }
+      } else {
+        if (gameNameEl) gameNameEl.textContent = "No Active Game";
+        if (gameDetailsEl) gameDetailsEl.textContent = "Coding or Exploring";
+        if (gameStateEl)
+          gameStateEl.textContent = "Available for collaboration";
+        if (gameStatusBadgeEl) {
+          gameStatusBadgeEl.textContent = "IDLE";
+          gameStatusBadgeEl.className =
+            "text-[10px] font-mono px-2 py-0.5 rounded bg-dracula-selection text-dracula-comment";
+        }
+        if (gameElapsedEl) gameElapsedEl.textContent = "Elapsed: --";
+        if (gameIconEl && gameIconFallbackEl) {
+          gameIconEl.classList.add("hidden");
+          gameIconFallbackEl.classList.remove("hidden");
+        }
+      }
+    }
+
+    function parseDiscordAssetUrl(assets: any, appId: string): string {
+      if (!assets?.large_image) return "";
+      const img = assets.large_image;
+      if (typeof img !== "string") return "";
+      if (img.startsWith("http://") || img.startsWith("https://")) return img;
+      if (img.startsWith("mp:external/")) {
+        return `https://media.discordapp.net/external/${img.replace("mp:external/", "")}`;
+      }
+      if (img.startsWith("spotify:")) {
+        return `https://i.scdn.co/image/${img.replace("spotify:", "")}`;
+      }
+      if (appId) {
+        return `https://cdn.discordapp.com/app-assets/${appId}/${img}.png`;
+      }
+      return "";
+    }
+
+    function formatTime(ms: number) {
+      if (isNaN(ms) || ms < 0) return "0:00";
+      const totalSecs = Math.floor(ms / 1000);
+      const mins = Math.floor(totalSecs / 60);
+      const secs = totalSecs % 60;
+      return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    }
+
+    function startSpotifyTimer() {
+      if (spotifyInterval) clearInterval(spotifyInterval);
+      spotifyInterval = setInterval(() => {
+        if (!currentSpotifyData || !currentSpotifyData.timestamps) return;
+        const now = Date.now();
+        const start = currentSpotifyData.timestamps.start;
+        const end = currentSpotifyData.timestamps.end;
+        const duration = end - start;
+        const elapsed = Math.min(now - start, duration);
+        const percent = Math.min((elapsed / duration) * 100, 100);
+
+        if (spotifyTimeElapsedEl)
+          spotifyTimeElapsedEl.textContent = formatTime(elapsed);
+        if (spotifyTimeTotalEl)
+          spotifyTimeTotalEl.textContent = formatTime(duration);
+        if (spotifyProgressBarEl)
+          spotifyProgressBarEl.style.width = `${percent}%`;
+      }, 1000);
+    }
+
+    // Connect to Live Lanyard WebSocket
+    function connectLanyard() {
+      if (ws) ws.close();
+
+      try {
+        ws = new WebSocket("wss://api.lanyard.rest/socket");
+
+        ws.onmessage = (event) => {
+          const message = JSON.parse(event.data);
+          const { op, d } = message;
+
+          if (op === 1) {
+            // Heartbeat ACK / Init
+            const heartbeatIntervalMs = d.heartbeat_interval;
+            heartbeatInterval = setInterval(() => {
+              const activeWs = ws as WebSocket | null;
+              if (activeWs && activeWs.readyState === WebSocket.OPEN) {
+                activeWs.send(JSON.stringify({ op: 3 }));
+              }
+            }, heartbeatIntervalMs);
+
+            // Subscribe to User ID
+            const activeWs = ws as WebSocket | null;
+            if (activeWs && activeWs.readyState === WebSocket.OPEN) {
+              activeWs.send(
+                JSON.stringify({
+                  op: 2,
+                  d: { subscribe_to_id: discordId },
+                }),
+              );
+            }
+          } else if (op === 0) {
+            // Event Dispatch (INIT_STATE or PRESENCE_UPDATE)
+            if (d) {
+              updateUI(d);
+            }
+          }
+        };
+
+        ws.onerror = () => {
+          fetchRESTFallback();
+        };
+
+        ws.onclose = () => {
+          if (heartbeatInterval) clearInterval(heartbeatInterval);
+        };
+      } catch (e) {
+        fetchRESTFallback();
+      }
+    }
+
+    function fetchRESTFallback() {
+      fetch(`https://api.lanyard.rest/v1/users/${discordId}`)
+        .then((res) => res.json())
+        .then((json) => {
+          if (json.success && json.data) {
+            updateUI(json.data);
+          }
+        })
+        .catch(() => {});
+    }
+
+    // Initialize UI with saved cookie before live data connects
+    updateUI({});
+    connectLanyard();
+    fetchRESTFallback();
+  }
+</script>

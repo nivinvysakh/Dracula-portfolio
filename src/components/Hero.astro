@@ -1,0 +1,141 @@
+---
+import { Image } from "astro:assets";
+import { SITE_CONFIG } from "../config";
+---
+
+<div
+  id="about"
+  class="dracula-card rounded-2xl p-5 sm:p-6 md:p-8 border border-dracula-selection/40 relative shadow-2xl overflow-hidden mb-8 scroll-mt-20"
+>
+  <!-- GitHub README Header Bar -->
+  <div
+    class="flex flex-wrap items-center justify-between border-b border-dracula-selection/40 pb-3 mb-6 font-mono text-xs text-dracula-comment gap-2 max-w-full overflow-hidden"
+  >
+    <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+      <span class="text-dracula-purple font-semibold">{SITE_CONFIG.name}</span>
+      <span>/</span>
+      <span class="text-dracula-fg font-medium">README.md</span>
+    </div>
+
+    <!-- GitHub Status Pill in place of pencil icon -->
+    {
+      SITE_CONFIG.readmeInfo.status && (
+        <div
+          class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-dracula-bgDarker border border-dracula-selection/50 text-[10px] sm:text-xs font-mono text-dracula-fg shadow-sm max-w-full sm:max-w-md truncate"
+          title={`Status: ${SITE_CONFIG.readmeInfo.status}`}
+        >
+          <span class="flex-shrink-0">{SITE_CONFIG.readmeInfo.status_ico}</span>
+          <span class="truncate text-dracula-fg/90">
+            {SITE_CONFIG.readmeInfo.status}
+          </span>
+        </div>
+      )
+    }
+  </div>
+
+  <!-- Content Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center md:items-start">
+    <!-- Avatar / Artwork Frame -->
+    <div class="md:col-span-5 md:order-last flex justify-center md:justify-end">
+      <div class="relative group">
+        <Image
+          src={SITE_CONFIG.avatarUrl}
+          alt={SITE_CONFIG.name}
+          width={224}
+          height={224}
+          loading="eager"
+          decoding="async"
+          class="w-36 h-36 sm:w-44 sm:h-44 md:w-56 md:h-56 rounded-2xl object-cover border-2 border-dracula-selection/60 shadow-xl group-hover:scale-[1.02] transition-transform"
+        />
+        <div
+          class="absolute inset-0 rounded-2xl border border-dracula-purple/30 pointer-events-none"
+        >
+        </div>
+      </div>
+    </div>
+
+    <!-- Title & Bio Bullets -->
+    <div class="md:col-span-7 space-y-4">
+      <div class="space-y-1 text-center md:text-left">
+        <span
+          class="font-mono text-sm font-semibold text-dracula-yellow block mb-1"
+        >
+          {SITE_CONFIG.readmeInfo.greeting}
+        </span>
+        <h1
+          class="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-dracula-fg"
+        >
+          {SITE_CONFIG.title}
+        </h1>
+        <p class="text-xs sm:text-sm font-mono italic text-dracula-purple font-medium">
+          <span class="text-dracula-purple font-bold not-italic">&ldquo;</span>{SITE_CONFIG.tagline}<span class="text-dracula-purple font-bold not-italic">&rdquo;</span>
+        </p>
+      </div>
+
+      <!-- Bullets List -->
+      <ul class="space-y-2.5 font-mono text-xs text-dracula-fg pt-2">
+        <li class="flex items-center gap-2">
+          <span class="text-base flex-shrink-0">🏗️</span>
+          <span class="font-bold text-dracula-fg flex-shrink-0">Focus:</span>
+          <span class="text-dracula-comment truncate"
+            >{SITE_CONFIG.readmeInfo.focus}</span
+          >
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="text-base flex-shrink-0">☁️</span>
+          <span class="font-bold text-dracula-fg flex-shrink-0">Cloud:</span>
+          <span class="text-dracula-comment truncate"
+            >{SITE_CONFIG.readmeInfo.cloud}</span
+          >
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="text-base flex-shrink-0">🐍</span>
+          <span class="font-bold text-dracula-fg flex-shrink-0">Scripting:</span>
+          <span class="text-dracula-comment truncate"
+            >{SITE_CONFIG.readmeInfo.scripting}</span
+          >
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="text-base flex-shrink-0">🏍️</span>
+          <span class="font-bold text-dracula-fg flex-shrink-0">Vibe:</span>
+          <span class="text-dracula-comment truncate">{SITE_CONFIG.readmeInfo.vibe}</span
+          >
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="text-base flex-shrink-0">🌱</span>
+          <span class="font-bold text-dracula-fg flex-shrink-0">Learning:</span>
+          <span class="text-dracula-comment truncate"
+            >{SITE_CONFIG.readmeInfo.learning}</span
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Tech Stack Icon Badges Row -->
+  <div class="mt-8 pt-6 border-t border-dracula-selection/40">
+    <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
+      {
+        SITE_CONFIG.techStack.map((tech) => (
+          <div
+            class="group relative dracula-glass rounded-xl p-2.5 sm:p-3 border border-dracula-selection/40 flex items-center justify-center hover:border-dracula-cyan/60 hover:bg-dracula-selection/30 transition-all hover:-translate-y-0.5"
+            title={tech.name}
+          >
+            <Image
+              src={tech.icon}
+              alt={tech.name}
+              width={24}
+              height={24}
+              class="w-6 h-6 object-contain"
+              loading="eager"
+              decoding="async"
+            />
+            <span class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-dracula-bgDarker text-dracula-fg border border-dracula-selection text-[10px] font-mono px-2 py-0.5 rounded shadow-lg pointer-events-none whitespace-nowrap z-10">
+              {tech.name}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>

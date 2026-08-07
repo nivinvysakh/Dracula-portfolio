@@ -1,0 +1,95 @@
+---
+import { SITE_CONFIG } from '../config';
+---
+
+<section id="collab" class="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6 scroll-mt-20">
+  <!-- Section Header -->
+  <div class="flex items-center gap-2 mb-8">
+    <span class="font-mono text-dracula-purple text-sm">03.</span>
+    <h2 class="text-xl font-bold tracking-tight text-dracula-fg">Projects & Collab</h2>
+    <div class="h-px bg-dracula-selection/40 flex-1 max-w-xs ml-2"></div>
+  </div>
+
+  <!-- Projects Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+    {SITE_CONFIG.projects.map((project) => (
+      <div class="dracula-card rounded-xl p-5 border border-dracula-selection/40 flex flex-col justify-between hover:border-dracula-purple/50 transition-colors">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-2">
+            <h3 class="font-mono text-base font-bold text-dracula-fg">
+              {project.title}
+            </h3>
+            <div class="flex items-center gap-1.5">
+              {project.archived ? (
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-dracula-orange/15 text-dracula-orange border border-dracula-orange/30 flex items-center gap-1 font-semibold">
+                  <svg class="w-3 h-3 text-dracula-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                  </svg>
+                  Archived
+                </span>
+              ) : project.openForCollab ? (
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-dracula-green/15 text-dracula-green border border-dracula-green/30 font-semibold">
+                  Collab
+                </span>
+              ) : null}
+            </div>
+          </div>
+
+          <p class="text-xs text-dracula-comment mb-4 leading-relaxed">
+            {project.description}
+          </p>
+        </div>
+
+        <div>
+          <!-- Minimal Tech Tags -->
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            {project.tags.map(tag => (
+              <span class="text-[11px] font-mono text-dracula-comment">
+                #{tag}
+              </span>
+            ))}
+          </div>
+
+          <!-- Links -->
+          <div class="flex items-center gap-4 pt-3 border-t border-dracula-selection/30 font-mono text-xs">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-dracula-comment hover:text-dracula-fg transition-colors"
+              >
+                GitHub &rarr;
+              </a>
+            )}
+
+            {project.demo && project.demo.trim() !== '' && (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-dracula-cyan hover:text-dracula-pink transition-colors font-semibold"
+              >
+                Live &rarr;
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Minimal Collaboration Banner -->
+  <div class="dracula-glass rounded-xl p-5 border border-dracula-selection/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div>
+      <h3 class="font-mono text-sm font-bold text-dracula-fg">Have an Idea or Open Source Project?</h3>
+      <p class="text-xs text-dracula-comment">Let's build clean, fast, and high-impact web software together.</p>
+    </div>
+    <a
+      href="#connect"
+      class="px-4 py-2 rounded-lg font-mono text-xs font-bold bg-dracula-green text-dracula-bg hover:bg-dracula-cyan transition-colors whitespace-nowrap"
+    >
+      Let's Talk &rarr;
+    </a>
+  </div>
+</section>

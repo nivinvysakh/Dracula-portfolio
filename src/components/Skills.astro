@@ -1,0 +1,33 @@
+---
+import { SITE_CONFIG } from '../config';
+---
+
+<section id="skills" class="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6 scroll-mt-20">
+  <!-- Section Header -->
+  <div class="flex items-center gap-2 mb-8">
+    <span class="font-mono text-dracula-green text-sm">02.</span>
+    <h2 class="text-xl font-bold tracking-tight text-dracula-fg">Skills & Technologies</h2>
+    <div class="h-px bg-dracula-selection/40 flex-1 max-w-xs ml-2"></div>
+  </div>
+
+  <!-- Category Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {SITE_CONFIG.skills.map((skillGroup) => (
+      <div class="dracula-card rounded-xl p-5 border border-dracula-selection/40">
+        <h3 class="font-mono text-xs font-bold text-dracula-fg uppercase tracking-wider mb-4 pb-2 border-b border-dracula-selection/30 flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-dracula-green"></span>
+          {skillGroup.category}
+        </h3>
+
+        <!-- Minimal Skill Badges -->
+        <div class="flex flex-wrap gap-2">
+          {skillGroup.items.map(item => (
+            <span class="px-2.5 py-1 rounded-md bg-dracula-bgDarker text-dracula-fg font-mono text-xs border border-dracula-selection/40 hover:border-dracula-green/50 transition-colors">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

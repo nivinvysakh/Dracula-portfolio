@@ -1,0 +1,102 @@
+---
+---
+
+<header class="sticky top-0 z-50 w-full dracula-glass border-b border-dracula-selection/30 transition-all duration-300">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+    <!-- Minimal Brand Logo -->
+    <a href="#about" aria-label="Nivin Portfolio Home" class="font-mono text-sm font-bold text-dracula-fg hover:text-dracula-purple transition-colors flex items-center gap-1">
+      <span class="text-dracula-pink">&lt;</span>
+      <span class="text-dracula-fg">github</span>
+      <span class="text-dracula-purple">/</span>
+      <span class="text-dracula-cyan">Nivin</span>
+      <span class="text-dracula-pink">&gt;</span>
+    </a>
+
+    <!-- Minimal Desktop Navigation -->
+    <nav class="hidden md:flex items-center space-x-6 font-mono text-xs">
+      <a href="#about" class="nav-link text-dracula-comment hover:text-dracula-cyan transition-colors">
+        about
+      </a>
+      <a href="#skills" class="nav-link text-dracula-comment hover:text-dracula-green transition-colors">
+        skills
+      </a>
+      <a href="#collab" class="nav-link text-dracula-comment hover:text-dracula-purple transition-colors">
+        collab
+      </a>
+      <a href="#connect" class="nav-link text-dracula-comment hover:text-dracula-pink transition-colors">
+        connect
+      </a>
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <button
+      id="mobile-menu-btn"
+      type="button"
+      aria-label="Toggle Navigation Menu"
+      class="md:hidden p-1.5 rounded-lg text-dracula-comment hover:text-dracula-fg focus:outline-none"
+    >
+      <svg id="menu-icon-open" class="w-5 h-5 block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg id="menu-icon-close" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Navigation Drawer -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-dracula-selection/30 bg-dracula-bgDarker/95 backdrop-blur-lg px-4 py-4 space-y-3 font-mono text-xs">
+    <a href="#about" class="mobile-nav-link block text-dracula-comment hover:text-dracula-cyan">about</a>
+    <a href="#skills" class="mobile-nav-link block text-dracula-comment hover:text-dracula-green">skills</a>
+    <a href="#collab" class="mobile-nav-link block text-dracula-comment hover:text-dracula-purple">collab</a>
+    <a href="#connect" class="mobile-nav-link block text-dracula-comment hover:text-dracula-pink">connect</a>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('menu-icon-open');
+  const iconClose = document.getElementById('menu-icon-close');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+  const desktopLinks = document.querySelectorAll('.nav-link');
+
+  if (btn && menu && iconOpen && iconClose) {
+    btn.addEventListener('click', () => {
+      const isHidden = menu.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden', !isHidden);
+      iconClose.classList.toggle('hidden', isHidden);
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      });
+    });
+  }
+
+  // Active section scroll highlighting
+  const sections = document.querySelectorAll('section[id], div[id="about"]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = (section as HTMLElement).offsetTop;
+      if (window.scrollY >= sectionTop - 120) {
+        current = section.getAttribute('id') || '';
+      }
+    });
+
+    desktopLinks.forEach(link => {
+      const href = link.getAttribute('href')?.replace('#', '');
+      if (href === current) {
+        link.classList.add('text-dracula-fg', 'font-bold');
+        link.classList.remove('text-dracula-comment');
+      } else {
+        link.classList.remove('text-dracula-fg', 'font-bold');
+        link.classList.add('text-dracula-comment');
+      }
+    });
+  });
+</script>

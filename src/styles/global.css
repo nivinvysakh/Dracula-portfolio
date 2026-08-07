@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+    background-color: #282a36;
+    color: #f8f8f2;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background-color: #282a36;
+    color: #f8f8f2;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Minimal Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1e1f29;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #44475a;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #bd93f9;
+  }
+
+  ::selection {
+    background-color: #44475a;
+    color: #ff79c6;
+  }
+}
+
+/* Minimal Dracula Card & Glass Utility */
+.dracula-glass {
+  background: rgba(33, 34, 44, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(68, 71, 90, 0.3);
+}
+
+.dracula-card {
+  background: #21222c;
+  border: 1px solid rgba(68, 71, 90, 0.35);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.dracula-card:hover {
+  border-color: rgba(189, 147, 249, 0.45);
+}

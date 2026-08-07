@@ -1,0 +1,202 @@
+---
+import { SITE_CONFIG } from "../config";
+---
+
+<section
+  id="connect"
+  class="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6 scroll-mt-20"
+>
+  <!-- Section Header -->
+  <div class="flex items-center gap-2 mb-8">
+    <span class="font-mono text-dracula-pink text-sm">04.</span>
+    <h2 class="text-xl font-bold tracking-tight text-dracula-fg">Connect</h2>
+    <div class="h-px bg-dracula-selection/40 flex-1 max-w-xs ml-2"></div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Quick Contact Column -->
+    <div class="lg:col-span-5 space-y-4">
+      <p class="text-xs text-dracula-comment leading-relaxed">
+        Feel free to reach out for collaborations, project inquiries, or just to
+        talk dev & design.
+      </p>
+
+      <!-- Email Box -->
+      <div
+        class="dracula-glass rounded-xl p-3 border border-dracula-selection/40 flex items-center justify-between gap-2"
+      >
+        <span
+          id="email-text"
+          class="font-mono text-xs text-dracula-cyan truncate"
+          >{SITE_CONFIG.email}</span
+        >
+        <button
+          id="copy-email-btn"
+          type="button"
+          class="px-2.5 py-1 rounded bg-dracula-purple/20 text-dracula-purple hover:bg-dracula-purple hover:text-dracula-bg font-mono text-[11px] font-bold transition-colors"
+        >
+          <span id="copy-btn-text">Copy</span>
+        </button>
+      </div>
+
+      <!-- Social Pills Grid -->
+      <div class="flex flex-wrap gap-2 pt-1">
+        {
+          SITE_CONFIG.socials.map((social) => (
+            <a
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-3 py-1.5 rounded-lg bg-dracula-card text-dracula-fg font-mono text-xs border border-dracula-selection/40 hover:border-dracula-pink/50 transition-colors"
+            >
+              {social.name}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Contact Form Column -->
+    <div class="lg:col-span-7">
+      <div
+        class="dracula-card rounded-xl p-5 border border-dracula-selection/40"
+      >
+        <form 
+          id="contact-form" 
+          data-email={SITE_CONFIG.email}
+          class="space-y-3 font-mono text-xs"
+        >
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="name" class="block text-dracula-comment mb-1"
+                >Name</label
+              >
+              <input
+                type="text"
+                id="name"
+                required
+                placeholder="Ada Lovelace"
+                class="w-full px-3 py-2 rounded-lg bg-dracula-bgDarker text-dracula-fg border border-dracula-selection/40 focus:border-dracula-purple focus:outline-none"
+              />
+            </div>
+            <div>
+              <label for="email" class="block text-dracula-comment mb-1"
+                >Email</label
+              >
+              <input
+                type="email"
+                id="email"
+                required
+                placeholder="ada@example.com"
+                class="w-full px-3 py-2 rounded-lg bg-dracula-bgDarker text-dracula-fg border border-dracula-selection/40 focus:border-dracula-purple focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="message" class="block text-dracula-comment mb-1"
+              >Message</label
+            >
+            <textarea
+              id="message"
+              rows="3"
+              required
+              placeholder="Your message..."
+              class="w-full px-3 py-2 rounded-lg bg-dracula-bgDarker text-dracula-fg border border-dracula-selection/40 focus:border-dracula-purple focus:outline-none"
+            ></textarea>
+          </div>
+
+          <button
+            id="submit-btn"
+            type="submit"
+            class="w-full py-2.5 px-4 rounded-lg font-mono text-xs font-bold bg-dracula-purple text-dracula-bg hover:bg-dracula-pink transition-colors disabled:opacity-50"
+          >
+            Send Message
+          </button>
+        </form>
+
+        <div
+          id="form-feedback"
+          class="hidden mt-3 p-2 rounded text-xs font-mono text-center border"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Copy Email to Clipboard
+  const copyBtn = document.getElementById("copy-email-btn");
+  const copyBtnText = document.getElementById("copy-btn-text");
+  const emailText = document.getElementById("email-text");
+
+  if (copyBtn && copyBtnText && emailText) {
+    copyBtn.addEventListener("click", () => {
+      const email = emailText.textContent || "nivinvysakh@icloud.com";
+      navigator.clipboard.writeText(email).then(() => {
+        copyBtnText.textContent = "Copied!";
+        setTimeout(() => {
+          copyBtnText.textContent = "Copy";
+        }, 2000);
+      });
+    });
+  }
+
+  // Live Contact Form AJAX submit to SITE_CONFIG.email (via FormSubmit API)
+  const form = document.getElementById("contact-form") as HTMLFormElement;
+  const feedback = document.getElementById("form-feedback");
+  const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
+
+  if (form && feedback && submitBtn) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const recipientEmail = form.getAttribute("data-email") || "nivinvysakh@icloud.com";
+      const nameVal = (document.getElementById("name") as HTMLInputElement).value.trim();
+      const emailVal = (document.getElementById("email") as HTMLInputElement).value.trim();
+      const messageVal = (document.getElementById("message") as HTMLTextAreaElement).value.trim();
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending Email...";
+
+      try {
+        const res = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            name: nameVal,
+            email: emailVal,
+            message: messageVal,
+            _subject: `New Portfolio Message from ${nameVal}`
+          })
+        });
+
+        if (res.ok) {
+          feedback.textContent = `✓ Message sent directly to ${recipientEmail}! I'll reply soon.`;
+          feedback.className = "mt-3 p-2 rounded bg-dracula-green/10 text-dracula-green font-mono text-xs text-center border border-dracula-green/30 block";
+          form.reset();
+        } else {
+          // Fallback to mailto link if API returns non-200
+          window.location.href = `mailto:${recipientEmail}?subject=Portfolio Inquiry from ${encodeURIComponent(nameVal)}&body=${encodeURIComponent(messageVal)}`;
+          feedback.textContent = `Opening your mail app to send email to ${recipientEmail}...`;
+          feedback.className = "mt-3 p-2 rounded bg-dracula-cyan/10 text-dracula-cyan font-mono text-xs text-center border border-dracula-cyan/30 block";
+        }
+      } catch (err) {
+        // Fallback to mailto link on network error
+        window.location.href = `mailto:${recipientEmail}?subject=Portfolio Inquiry from ${encodeURIComponent(nameVal)}&body=${encodeURIComponent(messageVal)}`;
+        feedback.textContent = `Opening your mail app to send email to ${recipientEmail}...`;
+        feedback.className = "mt-3 p-2 rounded bg-dracula-cyan/10 text-dracula-cyan font-mono text-xs text-center border border-dracula-cyan/30 block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send Message";
+        setTimeout(() => {
+          feedback.className = "hidden mt-3 p-2 rounded text-xs font-mono text-center border";
+        }, 6000);
+      }
+    });
+  }
+</script>

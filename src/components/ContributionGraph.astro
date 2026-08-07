@@ -1,0 +1,312 @@
+---
+import { SITE_CONFIG } from "../config";
+
+interface Props {
+  username?: string;
+}
+
+const { username = SITE_CONFIG.name } = Astro.props;
+---
+
+<div
+  id="github-graph-container"
+  data-username={username}
+  class="dracula-glass rounded-xl p-5 border border-dracula-selection/30 my-6"
+>
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-dracula-pink animate-pulse"></span>
+      <h4 class="font-mono text-xs font-bold text-dracula-fg">
+        Nivin's Contribution Graph
+      </h4>
+    </div>
+    <div
+      class="flex items-center gap-3 font-mono text-[10px] text-dracula-comment"
+    >
+      <span
+        id="total-commits-badge"
+        class="px-2 py-0.5 rounded bg-dracula-bgDarker text-dracula-cyan border border-dracula-selection/40"
+      >
+        Live GitHub Data
+      </span>
+      <a
+        href={`https://github.com/${username}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-dracula-pink transition-colors underline"
+      >
+        @{username}
+      </a>
+    </div>
+  </div>
+
+  <!-- Dynamic Live Wave SVG Graph Container -->
+  <div class="relative w-full overflow-x-auto">
+    <svg
+      id="contribution-svg"
+      viewBox="0 0 600 180"
+      class="w-full h-auto min-w-[500px]"
+    >
+      <!-- Grid Lines -->
+      <line
+        x1="40"
+        y1="30"
+        x2="570"
+        y2="30"
+        stroke="#44475a"
+        stroke-dasharray="3 3"
+        opacity="0.3"></line>
+      <line
+        x1="40"
+        y1="65"
+        x2="570"
+        y2="65"
+        stroke="#44475a"
+        stroke-dasharray="3 3"
+        opacity="0.3"></line>
+      <line
+        x1="40"
+        y1="100"
+        x2="570"
+        y2="100"
+        stroke="#44475a"
+        stroke-dasharray="3 3"
+        opacity="0.3"></line>
+      <line
+        x1="40"
+        y1="135"
+        x2="570"
+        y2="135"
+        stroke="#44475a"
+        stroke-dasharray="3 3"
+        opacity="0.3"></line>
+
+      <!-- Y-Axis Labels -->
+      <text
+        id="y-max"
+        x="30"
+        y="34"
+        fill="#6272a4"
+        font-size="10"
+        font-family="monospace"
+        text-anchor="end">16</text
+      >
+      <text
+        id="y-mid1"
+        x="30"
+        y="69"
+        fill="#6272a4"
+        font-size="10"
+        font-family="monospace"
+        text-anchor="end">12</text
+      >
+      <text
+        id="y-mid2"
+        x="30"
+        y="104"
+        fill="#6272a4"
+        font-size="10"
+        font-family="monospace"
+        text-anchor="end">8</text
+      >
+      <text
+        id="y-mid3"
+        x="30"
+        y="139"
+        fill="#6272a4"
+        font-size="10"
+        font-family="monospace"
+        text-anchor="end">4</text
+      >
+      <text
+        x="30"
+        y="160"
+        fill="#6272a4"
+        font-size="10"
+        font-family="monospace"
+        text-anchor="end">0</text
+      >
+
+      <defs>
+        <linearGradient id="draculaPinkGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ff79c6" stop-opacity="0.4"></stop>
+          <stop offset="100%" stop-color="#ff79c6" stop-opacity="0.0"></stop>
+        </linearGradient>
+      </defs>
+
+      <!-- Gradient Fill Path -->
+      <path
+        id="graph-area-path"
+        d="M 50 160 L 50 160 L 75 160 L 100 152 L 125 160 L 150 160 L 175 160 L 200 150 L 225 145 L 250 160 L 275 148 L 300 160 L 325 160 L 350 160 L 375 160 L 400 160 L 425 135 L 450 30 L 475 75 L 500 115 L 525 160 L 550 100 L 570 120 L 570 160 Z"
+        fill="url(#draculaPinkGrad)"></path>
+
+      <!-- Wave Stroke Line -->
+      <path
+        id="graph-line-path"
+        d="M 50 160 L 75 160 L 100 152 L 125 160 L 150 160 L 175 160 L 200 150 L 225 145 L 250 160 L 275 148 L 300 160 L 325 160 L 350 160 L 375 160 L 400 160 L 425 135 L 450 30 L 475 75 L 500 115 L 525 160 L 550 100 L 570 120"
+        fill="none"
+        stroke="#ff79c6"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+
+      <!-- Plot Dots Group -->
+      <g id="graph-dots-group"></g>
+
+      <!-- X-Axis Labels Group -->
+      <g
+        id="graph-x-labels"
+        font-size="9"
+        font-family="monospace"
+        fill="#6272a4"
+        text-anchor="middle"></g>
+    </svg>
+  </div>
+</div>
+
+<script>
+  // Live GitHub Contribution API fetcher for nivinvysakh
+  (function () {
+    const container = document.getElementById("github-graph-container");
+    if (!container) return;
+
+    const username = container.getAttribute("data-username") || "nivinvysakh";
+    const totalBadge = document.getElementById("total-commits-badge");
+    const areaPath = document.getElementById("graph-area-path");
+    const linePath = document.getElementById("graph-line-path");
+    const dotsGroup = document.getElementById("graph-dots-group");
+    const xLabelsGroup = document.getElementById("graph-x-labels");
+
+    const yMaxEl = document.getElementById("y-max");
+    const yMid1El = document.getElementById("y-mid1");
+    const yMid2El = document.getElementById("y-mid2");
+    const yMid3El = document.getElementById("y-mid3");
+
+    async function fetchLiveGitHubContributions() {
+      try {
+        const res = await fetch(
+          `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
+        );
+        if (!res.ok) throw new Error("API response failed");
+        const json = await res.json();
+
+        if (json && json.contributions && json.contributions.length > 0) {
+          // Take the last 22 days of activity
+          const recentDays = json.contributions.slice(-22);
+          renderGraph(recentDays);
+        }
+      } catch (e) {
+        console.warn(
+          "Failed to fetch live GitHub contributions, using fallback renderer",
+          e,
+        );
+      }
+    }
+
+    function renderGraph(days: Array<{ date: string; count: number }>) {
+      if (!days || days.length === 0) return;
+
+      const counts = days.map((d) => d.count);
+      const maxCount = Math.max(...counts, 8); // At least scale of 8
+
+      // Update Y-Axis labels
+      if (yMaxEl) yMaxEl.textContent = String(maxCount);
+      if (yMid1El) yMid1El.textContent = String(Math.round(maxCount * 0.75));
+      if (yMid2El) yMid2El.textContent = String(Math.round(maxCount * 0.5));
+      if (yMid3El) yMid3El.textContent = String(Math.round(maxCount * 0.25));
+
+      const totalRecent = counts.reduce((a, b) => a + b, 0);
+      if (totalBadge)
+        totalBadge.textContent = `${totalRecent} Contributions (Last 3 Weeks)`;
+
+      const startX = 50;
+      const endX = 570;
+      const stepX = (endX - startX) / (days.length - 1);
+      const minY = 160;
+      const maxY = 30;
+      const heightY = minY - maxY;
+
+      const points: Array<{
+        x: number;
+        y: number;
+        count: number;
+        date: string;
+      }> = [];
+
+      days.forEach((day, idx) => {
+        const x = startX + idx * stepX;
+        const normalized = day.count / maxCount;
+        const y = minY - normalized * heightY;
+        points.push({ x, y, count: day.count, date: day.date });
+      });
+
+      // Construct SVG line and area paths
+      let lineD = `M ${points[0].x} ${points[0].y}`;
+      let areaD = `M ${points[0].x} ${minY} L ${points[0].x} ${points[0].y}`;
+
+      for (let i = 1; i < points.length; i++) {
+        lineD += ` L ${points[i].x} ${points[i].y}`;
+        areaD += ` L ${points[i].x} ${points[i].y}`;
+      }
+
+      areaD += ` L ${points[points.length - 1].x} ${minY} Z`;
+
+      if (linePath) linePath.setAttribute("d", lineD);
+      if (areaPath) areaPath.setAttribute("d", areaD);
+
+      // Render Dots
+      if (dotsGroup) {
+        dotsGroup.innerHTML = "";
+        points.forEach((p) => {
+          const circle = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "circle",
+          );
+          circle.setAttribute("cx", String(p.x));
+          circle.setAttribute("cy", String(p.y));
+          circle.setAttribute("r", p.count > 0 ? "4" : "2.5");
+          circle.setAttribute(
+            "fill",
+            p.count === maxCount && p.count > 0 ? "#ff79c6" : "#bd93f9",
+          );
+          if (p.count === maxCount && p.count > 0) {
+            circle.setAttribute("stroke", "#f8f8f2");
+            circle.setAttribute("stroke-width", "1.5");
+          }
+
+          // Tooltip title
+          const title = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "title",
+          );
+          title.textContent = `${p.date}: ${p.count} contribution${p.count === 1 ? "" : "s"}`;
+          circle.appendChild(title);
+
+          dotsGroup.appendChild(circle);
+        });
+      }
+
+      // Render X-Axis Labels
+      if (xLabelsGroup) {
+        xLabelsGroup.innerHTML = "";
+        points.forEach((p, idx) => {
+          // Show every 2nd day label for clean spacing
+          if (idx % 2 === 0 || idx === points.length - 1) {
+            const dateObj = new Date(p.date);
+            const dayNum = dateObj.getDate();
+            const text = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "text",
+            );
+            text.setAttribute("x", String(p.x));
+            text.setAttribute("y", "176");
+            text.textContent = String(dayNum);
+            xLabelsGroup.appendChild(text);
+          }
+        });
+      }
+    }
+
+    fetchLiveGitHubContributions();
+  })();
+</script>
