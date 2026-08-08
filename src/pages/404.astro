@@ -1,0 +1,109 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_CONFIG } from "../config";
+
+const SAD_ANIME_GIF_URL =
+  "https://media.tenor.com/4q5OwnFZJdEAAAAM/adorable-pleading.gif";
+---
+
+<Layout title={`404: Page Not Found — ${SITE_CONFIG.name}`}>
+  <Navbar />
+
+  <main
+    class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 flex items-center justify-center min-h-[80vh]"
+  >
+    <div
+      class="relative w-full max-w-3xl flex flex-col md:flex-row items-center justify-center gap-8 sm:gap-10"
+    >
+      <!-- Background Ambient Neon Glow -->
+      <div
+        class="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 h-72 bg-dracula-pink/20 rounded-full blur-3xl pointer-events-none"
+      >
+      </div>
+      <div
+        class="absolute top-1/2 right-1/4 -translate-y-1/2 w-72 h-72 bg-dracula-purple/20 rounded-full blur-3xl pointer-events-none"
+      >
+      </div>
+
+      <!-- Floating Sad Anime Girl GIF (Roaming / Moving Around Screen) -->
+      <div class="animate-move-around z-20 relative group flex-shrink-0">
+        <div
+          class="w-48 h-48 sm:w-60 sm:h-60 rounded-2xl overflow-hidden border-2 border-dracula-pink/70 shadow-2xl dracula-glass relative"
+        >
+          <img
+            src={SAD_ANIME_GIF_URL}
+            alt="Sad Anime Girl Floating GIF"
+            width="240"
+            height="240"
+            loading="eager"
+            decoding="async"
+            class="w-full h-full object-cover"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-dracula-bgDarker/60 to-transparent"
+          >
+          </div>
+        </div>
+      </div>
+
+      <!-- Main 404 Widget Card (Right Side) -->
+      <div
+        class="dracula-card rounded-2xl p-6 sm:p-8 border border-dracula-selection/40 text-center md:text-left flex-1 w-full shadow-2xl relative overflow-hidden"
+      >
+        <!-- 404 Header Tag -->
+        <div
+          class="font-mono text-xs text-dracula-pink font-bold mb-2 tracking-widest flex items-center justify-center md:justify-start gap-2"
+        >
+          <span>&lt;</span>
+          <span>ERROR 404</span>
+          <span>/&gt;</span>
+        </div>
+
+        <!-- Main Heading -->
+        <h1
+          class="text-2xl sm:text-4xl font-extrabold font-mono text-dracula-fg tracking-tight mb-2"
+        >
+          Page Not Found
+        </h1>
+
+        <!-- Subtext Description -->
+        <p class="font-mono text-xs text-dracula-comment leading-relaxed mb-6">
+          Looks like you wandered into a dead end. The page you are looking for
+          doesn't exist or has been relocated.
+        </p>
+
+        <!-- Code Snippet Box -->
+        <div
+          class="bg-dracula-bgDarker rounded-xl p-3.5 border border-dracula-selection/50 font-mono text-left text-xs space-y-1 mb-6 text-dracula-comment shadow-inner"
+        >
+          <div>
+            <span class="text-dracula-purple">const</span>
+            <span class="text-dracula-cyan">status</span> = <span
+              class="text-dracula-pink">404</span
+            >;
+          </div>
+          <div>
+            <span class="text-dracula-purple">const</span>
+            <span class="text-dracula-cyan">location</span> = <span
+              class="text-dracula-yellow">"unknown"</span
+            >;
+          </div>
+          <div class="text-dracula-red">// Terminus reached</div>
+        </div>
+
+        <!-- Action Button -->
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-mono text-xs font-bold bg-dracula-purple text-dracula-bg hover:bg-dracula-pink transition-all shadow-lg hover:scale-[1.02]"
+        >
+          <span>&larr;</span>
+          <span>Return to Safety</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
