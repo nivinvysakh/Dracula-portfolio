@@ -480,7 +480,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
     function checkFavoriteSong(
       songName: string | undefined,
       artistName?: string,
-      isPlaying: boolean = false
+      isPlaying: boolean = false,
     ) {
       if (!spotifyHeartIconEl) return;
       if (!songName) {
@@ -961,8 +961,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
     connectLanyard();
     fetchRESTFallback();
 
-    // Auto-refresh Lanyard data every 60 seconds (1 min) for mobile reliability
-    setInterval(fetchRESTFallback, 60000);
+    setInterval(fetchRESTFallback, 30000);
 
     // Auto-refresh & reconnect when user switches back to tab or unlocks phone
     document.addEventListener("visibilitychange", () => {
