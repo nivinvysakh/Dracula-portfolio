@@ -1,6 +1,13 @@
 # Nivin | Portfolio & Developer README 🚀
 
-A minimalist, retro Dracula-themed developer portfolio built with **Astro 4**, **Tailwind CSS v3**, and **TypeScript**. Designed to match a GitHub `README.md` profile layout with real-time Discord presence, live Spotify activity, interactive contribution graph, and project showcase.
+[![Astro CI Build & Check](https://github.com/nivinvysakh/Dracula-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/nivinvysakh/Dracula-portfolio/actions/workflows/ci.yml)
+![Docker](https://img.shields.io/badge/Docker-Multi--stage-2496ED?logo=docker&logoColor=white)
+![NGINX](https://img.shields.io/badge/NGINX-Alpine-009639?logo=nginx&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro-v4.16-BC52EE?logo=astro&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-v3.4-06B6D4?logo=tailwindcss&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+A minimalist, retro Dracula-themed developer portfolio built with **Astro 4**, **Tailwind CSS v3**, **TypeScript**, and enterprise **DevOps Docker Containerization**.
 
 ---
 
@@ -10,23 +17,40 @@ A minimalist, retro Dracula-themed developer portfolio built with **Astro 4**, *
 - ⚡ **Lightning Fast (Astro 4)**: Near-zero JS runtime footprint, static SSR generation, optimized images, and high performance scores.
 - 🎵 **Live Discord & Spotify Integration (Lanyard WebSocket)**: Real-time status updates (Online/Idle/DND/Offline), custom status messages, live Spotify playback details, and active game rich presence.
 - 📊 **GitHub Contribution Graph**: Dynamic wave graph rendering recent GitHub contribution activity via live API sync with graceful fallbacks.
-- 🛠️ **Tech Stack & Bio**: Bulleted overview of core technologies (AWS, Docker, Kubernetes, Terraform, C++, Python, Bash) with responsive badge grids.
-- 📱 **Mobile Responsive Design**: Clean drawer menu, touch-friendly layouts, and fluid spacing for all mobile, tablet, and desktop screens.
-- ✉️ **Contact Form & Direct Connect**: Working contact form integration with quick email copy to clipboard.
+- 🐳 **Production Containerization**: Multi-stage `dockerfile` (`node:20-alpine` builder $\rightarrow$ `nginx:alpine` runtime) with NGINX 404 error page routing.
+- 🤖 **CI/CD Automation**: GitHub Actions pipeline for automated type checking, build audits, and Dependabot package updates.
 
 ---
 
-## 🛠️ Tech Stack
+## 🐳 Docker Setup
 
-- **Framework**: [Astro.js 4](https://astro.build)
-- **Styling**: [Tailwind CSS v3](https://tailwindcss.com)
-- **Language**: TypeScript / JavaScript (ES6+)
-- **Integrations**: [Lanyard API](https://github.com/Phipeter/lanyard) (Discord RPC WebSocket)
-- **Icons**: SimpleIcons & UXWing
+You can run the portfolio inside Docker containers for both **development** and **production**:
+
+### 1. Development Container (with Hot Reload)
+Run the Astro dev server inside Node 20 Docker container:
+
+```bash
+docker compose up -d dracula-portfolio-dev
+```
+- **Access**: [http://localhost:4321](http://localhost:4321)
+
+### 2. Production Container (NGINX Alpine)
+Build & run the optimized production container with custom NGINX 404 page routing:
+
+```bash
+docker compose up -d --build dracula-portfolio-prod
+```
+- **Access**: [http://localhost:8080](http://localhost:8080)
+- **Test 404 Page**: [http://localhost:8080/invalid-route](http://localhost:8080/invalid-route) (renders custom floating sad anime 404 page).
+
+### 3. Stop Containers
+```bash
+docker compose down
+```
 
 ---
 
-## 🚀 Quick Start
+## 🛠️ Local Development (Without Docker)
 
 ### Prerequisites
 
@@ -36,8 +60,8 @@ A minimalist, retro Dracula-themed developer portfolio built with **Astro 4**, *
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/nivinvysakh/PortfolioWebsite.git
-cd PortfolioWebsite
+git clone https://github.com/nivinvysakh/Dracula-portfolio.git
+cd Dracula-portfolio
 ```
 
 ### 2. Install dependencies
@@ -72,16 +96,15 @@ export const SITE_CONFIG = {
 };
 ```
 
-Update `SITE_CONFIG` with your own GitHub username, Discord ID, email, and social links to personalize the entire portfolio instantly.
-
 ---
 
 ## 📦 Scripts
 
-- `npm run dev`: Launches the Astro development server.
+- `npm run dev`: Launches the Astro development server locally.
 - `npm run build`: Compiles the static production site to `./dist`.
 - `npm run preview`: Previews the build output locally.
 - `npm run astro check`: Runs type checking and Astro diagnostic audit.
+- `docker compose up -d --build dracula-portfolio-prod`: Builds and launches NGINX production container on `http://localhost:8080`.
 
 ---
 
