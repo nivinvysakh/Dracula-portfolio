@@ -8,6 +8,14 @@ export const SITE_CONFIG = {
   discordId: "957196694393614367",
   avatarUrl: "https://github.com/nivinvysakh.png",
 
+  favoriteSongs: [
+    { song: "Panic", artist: "EsDeeKid" },
+    { song: "OH I DID", artist: "Yeat" },
+    { song: "Cali Man", artist: "EsDeekid" },
+    { song: "HIGHEST IN THE ROOM", artist: "Travis Scott" },
+    { song: "GIRLS", artist: "The Kid LAROI" }
+  ],
+
   readmeInfo: {
     greeting: "Hello there 👋",
     status_ico: "🍃",

@@ -12,6 +12,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
   id="lanyard-container"
   data-discord-id={discordId}
   data-avatar-url={SITE_CONFIG.avatarUrl}
+  data-favorite-songs={JSON.stringify(SITE_CONFIG.favoriteSongs || [])}
   class="dracula-card rounded-2xl p-5 sm:p-6 w-full relative overflow-hidden transition-all duration-300 border border-dracula-selection/40 shadow-xl"
 >
   <!-- Widget Top Bar / User Status Header -->
@@ -65,7 +66,8 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
     <div
       class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-dracula-bgDarker border border-dracula-selection/40 text-[10px] font-mono text-dracula-cyan flex-shrink-0"
     >
-      <span class="w-1.5 h-1.5 rounded-full bg-dracula-cyan animate-pulse flex-shrink-0"
+      <span
+        class="w-1.5 h-1.5 rounded-full bg-dracula-cyan animate-pulse flex-shrink-0"
       ></span>
       <span class="hidden sm:inline">Discord Live RPC</span>
       <span class="sm:hidden">LIVE</span>
@@ -104,15 +106,32 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
           </div>
           <span id="spotify-header-label">NOW PLAYING</span>
         </div>
-        <svg
-          class="w-4 h-4 text-dracula-green"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm5.521 17.341c-.219.359-.692.472-1.05.253-2.879-1.758-6.498-2.155-10.76-1.18-.406.094-.813-.162-.906-.569-.094-.406.162-.813.569-.906 4.656-1.062 8.656-.609 11.891 1.36.359.218.472.691.256 1.042zm1.48-3.295c-.276.438-.853.584-1.291.308-3.297-2.023-8.324-2.612-12.227-1.427-.492.149-1.011-.137-1.16-.629-.149-.492.137-1.011.629-1.16 4.46-1.353 9.992-.7 13.74 1.6.438.276.584.853.309 1.291zm.145-3.468C15.228 8.24 8.78 8.026 5.02 9.167c-.613.186-1.26-.168-1.446-.781-.186-.613.168-1.26.781-1.446 4.318-1.31 11.432-1.06 15.932 1.61.551.328.736 1.036.408 1.587-.328.552-1.035.737-1.586.408z"
-          ></path>
-        </svg>
+        <div class="flex items-center gap-2">
+          <!-- Favorite Song Heart Icon -->
+          <span
+            id="spotify-heart-icon"
+            class="hidden text-dracula-pink animate-pulse"
+            title="Favorite Track ♥"
+          >
+            <svg
+              class="w-4 h-4 text-dracula-pink fill-current"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              ></path>
+            </svg>
+          </span>
+          <svg
+            class="w-4 h-4 text-dracula-green"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm5.521 17.341c-.219.359-.692.472-1.05.253-2.879-1.758-6.498-2.155-10.76-1.18-.406.094-.813-.162-.906-.569-.094-.406.162-.813.569-.906 4.656-1.062 8.656-.609 11.891 1.36.359.218.472.691.256 1.042zm1.48-3.295c-.276.438-.853.584-1.291.308-3.297-2.023-8.324-2.612-12.227-1.427-.492.149-1.011-.137-1.16-.629-.149-.492.137-1.011.629-1.16 4.46-1.353 9.992-.7 13.74 1.6.438.276.584.853.309 1.291zm.145-3.468C15.228 8.24 8.78 8.026 5.02 9.167c-.613.186-1.26-.168-1.446-.781-.186-.613.168-1.26.781-1.446 4.318-1.31 11.432-1.06 15.932 1.61.551.328.736 1.036.408 1.587-.328.552-1.035.737-1.586.408z"
+            ></path>
+          </svg>
+        </div>
       </div>
 
       <!-- Spotify Track Details -->
@@ -124,7 +143,23 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
             target="_blank"
             rel="noopener noreferrer"
             title="Open on Spotify"
+            class="block relative w-12 h-12 rounded-lg border border-dracula-selection/40 overflow-hidden bg-dracula-bgDarker group-hover:opacity-80 transition-opacity"
           >
+            <!-- Fallback Music Note SVG Icon -->
+            <div
+              id="spotify-album-art-fallback"
+              class="w-full h-full flex items-center justify-center text-dracula-green p-2.5"
+            >
+              <svg
+                class="w-6 h-6 text-dracula-green"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"
+                ></path>
+              </svg>
+            </div>
             <img
               id="spotify-album-art"
               src="https://i.scdn.co/image/ab67616d0000b2738b52c67b93a02796e626e2e2"
@@ -133,7 +168,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
               height="48"
               loading="lazy"
               decoding="async"
-              class="w-12 h-12 rounded-lg object-cover border border-dracula-selection/40 group-hover:opacity-80 transition-opacity"
+              class="absolute inset-0 w-full h-full object-cover rounded-lg hidden"
             />
           </a>
         </div>
@@ -324,13 +359,36 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
     const customStatusEl = document.getElementById("lanyard-custom-status");
 
     // Spotify Elements
-    const spotifySongEl = document.getElementById("spotify-song") as HTMLAnchorElement;
-    const spotifyAlbumLinkEl = document.getElementById("spotify-album-link") as HTMLAnchorElement;
+    const spotifySongEl = document.getElementById(
+      "spotify-song",
+    ) as HTMLAnchorElement;
+    const spotifyAlbumLinkEl = document.getElementById(
+      "spotify-album-link",
+    ) as HTMLAnchorElement;
     const spotifyArtistEl = document.getElementById("spotify-artist");
     const spotifyAlbumEl = document.getElementById("spotify-album");
     const spotifyAlbumArtEl = document.getElementById(
       "spotify-album-art",
     ) as HTMLImageElement;
+    const spotifyAlbumArtFallbackEl = document.getElementById(
+      "spotify-album-art-fallback",
+    );
+
+    if (spotifyAlbumArtEl && spotifyAlbumArtFallbackEl) {
+      spotifyAlbumArtEl.onerror = () => {
+        spotifyAlbumArtEl.classList.add("hidden");
+        spotifyAlbumArtFallbackEl.classList.remove("hidden");
+      };
+      spotifyAlbumArtEl.onload = () => {
+        if (
+          spotifyAlbumArtEl.src &&
+          !spotifyAlbumArtEl.src.endsWith("undefined")
+        ) {
+          spotifyAlbumArtEl.classList.remove("hidden");
+          spotifyAlbumArtFallbackEl.classList.add("hidden");
+        }
+      };
+    }
     const spotifyTimeElapsedEl = document.getElementById(
       "spotify-time-elapsed",
     );
@@ -348,6 +406,115 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
     const eqBar1 = document.getElementById("eq-bar-1");
     const eqBar2 = document.getElementById("eq-bar-2");
     const eqBar3 = document.getElementById("eq-bar-3");
+    const spotifyHeartIconEl = document.getElementById("spotify-heart-icon");
+
+    const favoriteSongsRaw =
+      container?.getAttribute("data-favorite-songs") || "[]";
+    let favoriteSongs: string[] = [];
+    try {
+      favoriteSongs = JSON.parse(favoriteSongsRaw);
+    } catch (e) {
+      favoriteSongs = [];
+    }
+
+    function cleanSongTitle(str: string): string {
+      return str
+        .toLowerCase()
+        .replace(/[\(\)\[\]\{\}\-\–\—\:\,\.\'\"]/g, " ")
+        .replace(
+          /\b(feat|ft|featuring|remastered|remaster|edit|mix|version|explicit|clean|deluxe|live|radio)\b.*$/gi,
+          "",
+        )
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function levenshteinDistance(a: string, b: string): number {
+      if (a.length === 0) return b.length;
+      if (b.length === 0) return a.length;
+      const matrix: number[][] = [];
+      for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1,
+              matrix[i][j - 1] + 1,
+              matrix[i - 1][j] + 1,
+            );
+          }
+        }
+      }
+      return matrix[b.length][a.length];
+    }
+
+    function fuzzySongMatch(currentSong: string, targetSong: string): boolean {
+      if (!currentSong || !targetSong) return false;
+      const normCurrent = cleanSongTitle(currentSong);
+      const normTarget = cleanSongTitle(targetSong);
+
+      if (!normCurrent || !normTarget) return false;
+
+      // Direct, substring or normalized match
+      if (
+        normCurrent === normTarget ||
+        normCurrent.includes(normTarget) ||
+        normTarget.includes(normCurrent)
+      ) {
+        return true;
+      }
+
+      // Levenshtein similarity distance check (75% similarity threshold)
+      const maxLen = Math.max(normCurrent.length, normTarget.length);
+      if (maxLen === 0) return false;
+
+      const dist = levenshteinDistance(normCurrent, normTarget);
+      const similarity = 1 - dist / maxLen;
+      return similarity >= 0.75;
+    }
+
+    function checkFavoriteSong(
+      songName: string | undefined,
+      artistName?: string,
+    ) {
+      if (!spotifyHeartIconEl) return;
+      if (!songName) {
+        spotifyHeartIconEl.classList.add("hidden");
+        return;
+      }
+
+      const artistLower = (artistName || "").toLowerCase();
+
+      const isFav = favoriteSongs.some((fav: any) => {
+        if (typeof fav === "string") {
+          return fuzzySongMatch(songName, fav);
+        }
+        if (typeof fav === "object" && fav !== null) {
+          const favSong = fav.song || fav.title || "";
+          const favArtist = (fav.artist || fav.author || "").toLowerCase();
+
+          const songMatches = favSong
+            ? fuzzySongMatch(songName, favSong)
+            : true;
+          const artistMatches = favArtist
+            ? artistLower.includes(favArtist)
+            : true;
+
+          return songMatches && artistMatches;
+        }
+        return false;
+      });
+
+      if (isFav) {
+        spotifyHeartIconEl.classList.remove("hidden");
+      } else {
+        spotifyHeartIconEl.classList.add("hidden");
+      }
+    }
 
     // Cookie & Storage Utilities for Last Played Song
     const COOKIE_NAME = "last_played_spotify";
@@ -498,8 +665,13 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
         if (spotifyArtistEl) spotifyArtistEl.textContent = data.spotify.artist;
         if (spotifyAlbumEl)
           spotifyAlbumEl.textContent = `Album: ${data.spotify.album}`;
-        if (spotifyAlbumArtEl)
+        if (spotifyAlbumArtEl) {
           spotifyAlbumArtEl.src = data.spotify.album_art_url;
+          spotifyAlbumArtEl.classList.remove("hidden");
+          if (spotifyAlbumArtFallbackEl)
+            spotifyAlbumArtFallbackEl.classList.add("hidden");
+        }
+        checkFavoriteSong(data.spotify.song, data.spotify.artist);
         startSpotifyTimer();
       } else {
         currentSpotifyData = null;
@@ -542,14 +714,20 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
           if (spotifyArtistEl) spotifyArtistEl.textContent = lastPlayed.artist;
           if (spotifyAlbumEl)
             spotifyAlbumEl.textContent = `Album: ${lastPlayed.album}`;
-          if (spotifyAlbumArtEl)
+          if (spotifyAlbumArtEl) {
             spotifyAlbumArtEl.src = lastPlayed.album_art_url;
+            spotifyAlbumArtEl.classList.remove("hidden");
+            if (spotifyAlbumArtFallbackEl)
+              spotifyAlbumArtFallbackEl.classList.add("hidden");
+          }
+          checkFavoriteSong(lastPlayed.song, lastPlayed.artist);
           if (spotifyTimeElapsedEl) spotifyTimeElapsedEl.textContent = "0:00";
           if (spotifyTimeTotalEl)
             spotifyTimeTotalEl.textContent = "Last Played";
           if (spotifyProgressBarEl) spotifyProgressBarEl.style.width = "100%";
         } else {
           // Spotify Offline
+          checkFavoriteSong(undefined);
           if (spotifyHeaderLabelEl)
             spotifyHeaderLabelEl.textContent = "SPOTIFY OFFLINE";
           if (spotifyStatusHeaderEl)
@@ -579,6 +757,10 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
           }
           if (spotifyArtistEl) spotifyArtistEl.textContent = "Spotify Offline";
           if (spotifyAlbumEl) spotifyAlbumEl.textContent = "—";
+          if (spotifyAlbumArtEl && spotifyAlbumArtFallbackEl) {
+            spotifyAlbumArtEl.classList.add("hidden");
+            spotifyAlbumArtFallbackEl.classList.remove("hidden");
+          }
           if (spotifyTimeElapsedEl) spotifyTimeElapsedEl.textContent = "0:00";
           if (spotifyTimeTotalEl) spotifyTimeTotalEl.textContent = "0:00";
           if (spotifyProgressBarEl) spotifyProgressBarEl.style.width = "0%";
@@ -595,7 +777,11 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
         if (gameStateEl)
           gameStateEl.textContent = gameAct.state || "Active Session";
         if (gameStatusBadgeEl) {
-          gameStatusBadgeEl.textContent = "PLAYING";
+          const isVSCode =
+            gameAct.name &&
+            (gameAct.name.trim().toLowerCase().includes("visual studio code") ||
+              gameAct.name.trim().toLowerCase() === "vscode");
+          gameStatusBadgeEl.textContent = isVSCode ? "FAAAA" : "PLAYING";
           gameStatusBadgeEl.className =
             "text-[10px] font-mono px-2 py-0.5 rounded bg-dracula-purple/20 text-dracula-purple font-bold";
         }
@@ -740,6 +926,11 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
 
         ws.onclose = () => {
           if (heartbeatInterval) clearInterval(heartbeatInterval);
+          setTimeout(() => {
+            if (document.visibilityState === "visible") {
+              connectLanyard();
+            }
+          }, 5000);
         };
       } catch (e) {
         fetchRESTFallback();
@@ -761,5 +952,18 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
     updateUI({});
     connectLanyard();
     fetchRESTFallback();
+
+    // Auto-refresh Lanyard data every 60 seconds (1 min) for mobile reliability
+    setInterval(fetchRESTFallback, 60000);
+
+    // Auto-refresh & reconnect when user switches back to tab or unlocks phone
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        fetchRESTFallback();
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+          connectLanyard();
+        }
+      }
+    });
   }
 </script>
