@@ -1,10 +1,20 @@
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+// @ts-check
+import { defineConfig } from "astro/config";
+import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind()],
-  image: {
-    remotePatterns: [{ protocol: 'https' }]
-  }
+  devToolbar: {
+    enabled: false,
+  },
+  server: {
+    host: true,
+    port: 4321,
+  },
+  vite: {
+    server: {
+      allowedHosts: ["tui-portfolio-dev.tuiportfolio.orb.local", ".orb.local", "localhost"],
+    },
+  },
 });
