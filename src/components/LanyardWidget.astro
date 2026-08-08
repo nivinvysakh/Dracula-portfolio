@@ -480,10 +480,12 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
     function checkFavoriteSong(
       songName: string | undefined,
       artistName?: string,
+      isPlaying: boolean = false
     ) {
       if (!spotifyHeartIconEl) return;
       if (!songName) {
         spotifyHeartIconEl.classList.add("hidden");
+        spotifyHeartIconEl.classList.remove("animate-pulse");
         return;
       }
 
@@ -511,8 +513,14 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
 
       if (isFav) {
         spotifyHeartIconEl.classList.remove("hidden");
+        if (isPlaying) {
+          spotifyHeartIconEl.classList.add("animate-pulse");
+        } else {
+          spotifyHeartIconEl.classList.remove("animate-pulse");
+        }
       } else {
         spotifyHeartIconEl.classList.add("hidden");
+        spotifyHeartIconEl.classList.remove("animate-pulse");
       }
     }
 
@@ -671,7 +679,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
           if (spotifyAlbumArtFallbackEl)
             spotifyAlbumArtFallbackEl.classList.add("hidden");
         }
-        checkFavoriteSong(data.spotify.song, data.spotify.artist);
+        checkFavoriteSong(data.spotify.song, data.spotify.artist, true);
         startSpotifyTimer();
       } else {
         currentSpotifyData = null;
@@ -720,7 +728,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
             if (spotifyAlbumArtFallbackEl)
               spotifyAlbumArtFallbackEl.classList.add("hidden");
           }
-          checkFavoriteSong(lastPlayed.song, lastPlayed.artist);
+          checkFavoriteSong(lastPlayed.song, lastPlayed.artist, false);
           if (spotifyTimeElapsedEl) spotifyTimeElapsedEl.textContent = "0:00";
           if (spotifyTimeTotalEl)
             spotifyTimeTotalEl.textContent = "Last Played";
