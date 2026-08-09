@@ -3,18 +3,18 @@
 [![Astro CI Build & Check](https://github.com/nivinvysakh/Dracula-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/nivinvysakh/Dracula-portfolio/actions/workflows/ci.yml)
 ![Docker](https://img.shields.io/badge/Docker-Multi--stage-2496ED?logo=docker&logoColor=white)
 ![NGINX](https://img.shields.io/badge/NGINX-Alpine-009639?logo=nginx&logoColor=white)
-![Astro](https://img.shields.io/badge/Astro-v4.16-BC52EE?logo=astro&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind-v3.4-06B6D4?logo=tailwindcss&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro-v7.2-BC52EE?logo=astro&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-v4.3-06B6D4?logo=tailwindcss&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-A minimalist, retro Dracula-themed developer portfolio built with **Astro 4**, **Tailwind CSS v3**, **TypeScript**, and enterprise **DevOps Docker Containerization**.
+A minimalist, retro Dracula-themed developer portfolio built with **Astro 7**, **Tailwind CSS v4**, **TypeScript**, and enterprise **DevOps Docker Containerization**.
 
 ---
 
 ## ✨ Features
 
 - 🎨 **Dracula Theme Palette**: Premium dark mode styling using curated Dracula color tokens (`#282a36`, `#44475a`, `#f8f8f2`, `#bd93f9`, `#ff79c6`, `#8be9fd`, `#50fa7b`).
-- ⚡ **Lightning Fast (Astro 4)**: Near-zero JS runtime footprint, static SSR generation, optimized images, and high performance scores.
+- ⚡ **Lightning Fast (Astro 7)**: Near-zero JS runtime footprint, static SSR generation, optimized images, and high performance scores.
 - 🎵 **Live Discord & Spotify Integration (Lanyard WebSocket)**: Real-time status updates (Online/Idle/DND/Offline), custom status messages, live Spotify playback details, and active game rich presence.
 - 📊 **GitHub Contribution Graph**: Dynamic wave graph rendering recent GitHub contribution activity via live API sync with graceful fallbacks.
 - 🐳 **Production Containerization**: Multi-stage `dockerfile` (`node:20-alpine` builder $\rightarrow$ `nginx:alpine` runtime) with NGINX 404 error page routing.
