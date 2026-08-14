@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { SITE_CONFIG } from "../config";
+import ParticlesBackground from "../components/ParticlesBackground.astro";
 
 interface Props {
   title?: string;
@@ -14,7 +15,10 @@ const { title = "Nivin", description = SITE_CONFIG.description } = Astro.props;
 <html lang="en" class="scroll-smooth overflow-x-hidden w-full">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
@@ -40,16 +44,22 @@ const { title = "Nivin", description = SITE_CONFIG.description } = Astro.props;
   <body
     class="bg-dracula-bg text-dracula-fg antialiased selection:bg-dracula-selection selection:text-dracula-pink relative min-h-screen flex flex-col overflow-x-hidden w-full max-w-full"
   >
-    <!-- Subtle Background Glow Orbs -->
+    <!-- Background Glow Orbs -->
     <div
-      class="fixed top-0 left-1/4 w-96 h-96 bg-dracula-purple/10 rounded-full blur-[120px] pointer-events-none -z-10"
+      class="fixed top-0 left-1/4 w-96 h-96 bg-dracula-purple/10 rounded-full blur-[120px] pointer-events-none z-0"
     >
     </div>
     <div
-      class="fixed bottom-0 right-1/4 w-96 h-96 bg-dracula-cyan/10 rounded-full blur-[120px] pointer-events-none -z-10"
+      class="fixed bottom-0 right-1/4 w-96 h-96 bg-dracula-cyan/10 rounded-full blur-[120px] pointer-events-none z-0"
     >
     </div>
 
-    <slot />
+    <!-- Pure Dracula Particles Background -->
+    <ParticlesBackground />
+
+    <!-- Main Portfolio Content Layer -->
+    <div class="relative z-10 flex flex-col min-h-screen w-full">
+      <slot />
+    </div>
   </body>
 </html>

@@ -3,5 +3,7 @@
   "compilerOptions": {
     "jsx": "preserve",
     "jsxImportSource": "astro"
-  }
+  },
+  "include": ["src/**/*"]
 }
+

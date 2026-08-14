@@ -84,24 +84,28 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
       <div class="flex items-center justify-between mb-2.5">
         <div
           id="spotify-status-header"
-          class="flex items-center gap-1.5 text-dracula-green font-mono text-[11px] font-bold"
+          class="flex items-center gap-2 text-dracula-green font-mono text-[11px] font-bold"
         >
-          <!-- Equalizer Icon -->
+          <!-- Mini Animated Equalizer Audio Graph (LEFT side) -->
           <div
             id="spotify-equalizer"
             class="flex items-end gap-[2px] h-3.5 opacity-100"
           >
             <span
               id="eq-bar-1"
-              class="w-0.5 bg-dracula-green rounded-full animate-equalizer-1"
+              class="w-[2.5px] bg-dracula-green rounded-full h-3 animate-equalizer-1"
             ></span>
             <span
               id="eq-bar-2"
-              class="w-0.5 bg-dracula-green rounded-full animate-equalizer-2"
+              class="w-[2.5px] bg-dracula-green rounded-full h-2 animate-equalizer-2"
             ></span>
             <span
               id="eq-bar-3"
-              class="w-0.5 bg-dracula-green rounded-full animate-equalizer-3"
+              class="w-[2.5px] bg-dracula-green rounded-full h-3.5 animate-equalizer-3"
+            ></span>
+            <span
+              id="eq-bar-4"
+              class="w-[2.5px] bg-dracula-green rounded-full h-2 animate-equalizer-4"
             ></span>
           </div>
           <span id="spotify-header-label">NOW PLAYING</span>
@@ -340,6 +344,8 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
 </div>
 
 <script>
+  import { saveLiveSpotifyTrack, clearLiveSpotifyTrack, getLastPlayedTrackFromFirebase } from "../lib/firebase";
+
   // Lanyard WebSocket & REST Integration script
   const container = document.getElementById("lanyard-container");
   if (container) {
@@ -406,6 +412,7 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
     const eqBar1 = document.getElementById("eq-bar-1");
     const eqBar2 = document.getElementById("eq-bar-2");
     const eqBar3 = document.getElementById("eq-bar-3");
+    const eqBar4 = document.getElementById("eq-bar-4");
     const spotifyHeartIconEl = document.getElementById("spotify-heart-icon");
 
     const favoriteSongsRaw =
@@ -524,47 +531,6 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
       }
     }
 
-    // Cookie & Storage Utilities for Last Played Song
-    const COOKIE_NAME = "last_played_spotify";
-
-    function setLastPlayedCookie(songData: {
-      song: string;
-      artist: string;
-      album: string;
-      album_art_url: string;
-      track_id?: string;
-    }) {
-      try {
-        const value = JSON.stringify(songData);
-        const date = new Date();
-        date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
-        document.cookie = `${COOKIE_NAME}=${encodeURIComponent(value)}; expires=${date.toUTCString()}; path=/; SameSite=Lax`;
-        localStorage.setItem(COOKIE_NAME, value);
-      } catch (e) {}
-    }
-
-    function getLastPlayedCookie(): {
-      song: string;
-      artist: string;
-      album: string;
-      album_art_url: string;
-      track_id?: string;
-    } | null {
-      try {
-        const nameEQ = COOKIE_NAME + "=";
-        const ca = document.cookie.split(";");
-        for (let i = 0; i < ca.length; i++) {
-          let c = ca[i].trim();
-          if (c.indexOf(nameEQ) === 0) {
-            return JSON.parse(decodeURIComponent(c.substring(nameEQ.length)));
-          }
-        }
-        const stored = localStorage.getItem(COOKIE_NAME);
-        if (stored) return JSON.parse(stored);
-      } catch (e) {}
-      return null;
-    }
-
     // Game Elements
     const gameNameEl = document.getElementById("game-name");
     const gameDetailsEl = document.getElementById("game-details");
@@ -629,13 +595,13 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
       if (data.spotify) {
         currentSpotifyData = data.spotify;
 
-        // Save to cookie for last played persistence
-        setLastPlayedCookie({
+        // Save live Spotify activity to Firebase Realtime Database
+        saveLiveSpotifyTrack({
           song: data.spotify.song,
           artist: data.spotify.artist,
           album: data.spotify.album,
-          album_art_url: data.spotify.album_art_url,
-          track_id: data.spotify.track_id,
+          albumArtUrl: data.spotify.album_art_url,
+          trackId: data.spotify.track_id,
         });
 
         // Set Live UI
@@ -646,13 +612,16 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
             "flex items-center gap-2 text-dracula-green font-mono text-xs font-bold";
         if (eqBar1)
           eqBar1.className =
-            "w-1 bg-dracula-green rounded-full animate-equalizer-1";
+            "w-[2.5px] bg-dracula-green rounded-full animate-equalizer-1";
         if (eqBar2)
           eqBar2.className =
-            "w-1 bg-dracula-green rounded-full animate-equalizer-2";
+            "w-[2.5px] bg-dracula-green rounded-full animate-equalizer-2";
         if (eqBar3)
           eqBar3.className =
-            "w-1 bg-dracula-green rounded-full animate-equalizer-3";
+            "w-[2.5px] bg-dracula-green rounded-full animate-equalizer-3";
+        if (eqBar4)
+          eqBar4.className =
+            "w-[2.5px] bg-dracula-green rounded-full animate-equalizer-4";
         if (spotifyEqualizerEl)
           spotifyEqualizerEl.className =
             "flex items-end gap-[2px] h-4 opacity-100";
@@ -685,9 +654,16 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
         currentSpotifyData = null;
         if (spotifyInterval) clearInterval(spotifyInterval);
 
-        const lastPlayed = getLastPlayedCookie();
-        if (lastPlayed) {
-          // Display Last Played Song from Cookie
+        // Delete spotify/current node completely in Firebase when sound pauses/stops
+        clearLiveSpotifyTrack();
+
+        function renderLastPlayedUI(track: {
+          song: string;
+          artist: string;
+          album: string;
+          album_art_url: string;
+          track_id?: string;
+        }) {
           if (spotifyHeaderLabelEl)
             spotifyHeaderLabelEl.textContent = "LAST PLAYED SONG";
           if (spotifyStatusHeaderEl)
@@ -695,46 +671,50 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
               "flex items-center gap-2 text-dracula-orange font-mono text-xs font-bold";
           if (eqBar1)
             eqBar1.className =
-              "w-1 h-2 bg-dracula-orange rounded-full opacity-60";
+              "w-[2.5px] h-2 bg-dracula-orange rounded-full opacity-60";
           if (eqBar2)
             eqBar2.className =
-              "w-1 h-3.5 bg-dracula-orange rounded-full opacity-60";
+              "w-[2.5px] h-3.5 bg-dracula-orange rounded-full opacity-60";
           if (eqBar3)
             eqBar3.className =
-              "w-1 h-2.5 bg-dracula-orange rounded-full opacity-60";
+              "w-[2.5px] h-2.5 bg-dracula-orange rounded-full opacity-60";
+          if (eqBar4)
+            eqBar4.className =
+              "w-[2.5px] h-3 bg-dracula-orange rounded-full opacity-60";
           if (spotifyEqualizerEl)
             spotifyEqualizerEl.className =
               "flex items-end gap-[2px] h-4 opacity-70";
 
-          const spotifyUrl = lastPlayed.track_id
-            ? `https://open.spotify.com/track/${lastPlayed.track_id}`
-            : `https://open.spotify.com/search/${encodeURIComponent(lastPlayed.song + " " + lastPlayed.artist)}`;
+          const spotifyUrl = track.track_id
+            ? `https://open.spotify.com/track/${track.track_id}`
+            : `https://open.spotify.com/search/${encodeURIComponent(track.song + " " + track.artist)}`;
 
           if (spotifySongEl) {
-            spotifySongEl.textContent = lastPlayed.song;
+            spotifySongEl.textContent = track.song;
             spotifySongEl.href = spotifyUrl;
-            spotifySongEl.title = `Listen to "${lastPlayed.song}" on Spotify`;
+            spotifySongEl.title = `Listen to "${track.song}" on Spotify`;
           }
           if (spotifyAlbumLinkEl) {
             spotifyAlbumLinkEl.href = spotifyUrl;
-            spotifyAlbumLinkEl.title = `Listen to "${lastPlayed.song}" on Spotify`;
+            spotifyAlbumLinkEl.title = `Listen to "${track.song}" on Spotify`;
           }
-          if (spotifyArtistEl) spotifyArtistEl.textContent = lastPlayed.artist;
+          if (spotifyArtistEl) spotifyArtistEl.textContent = track.artist;
           if (spotifyAlbumEl)
-            spotifyAlbumEl.textContent = `Album: ${lastPlayed.album}`;
+            spotifyAlbumEl.textContent = `Album: ${track.album}`;
           if (spotifyAlbumArtEl) {
-            spotifyAlbumArtEl.src = lastPlayed.album_art_url;
+            spotifyAlbumArtEl.src = track.album_art_url;
             spotifyAlbumArtEl.classList.remove("hidden");
             if (spotifyAlbumArtFallbackEl)
               spotifyAlbumArtFallbackEl.classList.add("hidden");
           }
-          checkFavoriteSong(lastPlayed.song, lastPlayed.artist, false);
+          checkFavoriteSong(track.song, track.artist, false);
           if (spotifyTimeElapsedEl) spotifyTimeElapsedEl.textContent = "0:00";
           if (spotifyTimeTotalEl)
             spotifyTimeTotalEl.textContent = "Last Played";
           if (spotifyProgressBarEl) spotifyProgressBarEl.style.width = "100%";
-        } else {
-          // Spotify Offline
+        }
+
+        function renderOfflineUI() {
           checkFavoriteSong(undefined);
           if (spotifyHeaderLabelEl)
             spotifyHeaderLabelEl.textContent = "SPOTIFY OFFLINE";
@@ -743,36 +723,53 @@ const { discordId = SITE_CONFIG.discordId } = Astro.props;
               "flex items-center gap-2 text-dracula-comment font-mono text-xs font-bold";
           if (eqBar1)
             eqBar1.className =
-              "w-1 h-1 bg-dracula-comment rounded-full opacity-40";
+              "w-[2.5px] h-1 bg-dracula-comment rounded-full opacity-40";
           if (eqBar2)
             eqBar2.className =
-              "w-1 h-1 bg-dracula-comment rounded-full opacity-40";
+              "w-[2.5px] h-1 bg-dracula-comment rounded-full opacity-40";
           if (eqBar3)
             eqBar3.className =
-              "w-1 h-1 bg-dracula-comment rounded-full opacity-40";
+              "w-[2.5px] h-1 bg-dracula-comment rounded-full opacity-40";
+          if (eqBar4)
+            eqBar4.className =
+              "w-[2.5px] h-1 bg-dracula-comment rounded-full opacity-40";
           if (spotifyEqualizerEl)
             spotifyEqualizerEl.className =
               "flex items-end gap-[2px] h-4 opacity-40";
 
           if (spotifySongEl) {
             spotifySongEl.textContent = "Not Listening";
-            spotifySongEl.href = "https://open.spotify.com";
-            spotifySongEl.title = "Open Spotify";
+            spotifySongEl.removeAttribute("href");
+            spotifySongEl.title = "Spotify is currently offline or paused";
           }
           if (spotifyAlbumLinkEl) {
-            spotifyAlbumLinkEl.href = "https://open.spotify.com";
-            spotifyAlbumLinkEl.title = "Open Spotify";
+            spotifyAlbumLinkEl.removeAttribute("href");
+            spotifyAlbumLinkEl.title = "Spotify is currently offline or paused";
           }
           if (spotifyArtistEl) spotifyArtistEl.textContent = "Spotify Offline";
-          if (spotifyAlbumEl) spotifyAlbumEl.textContent = "—";
-          if (spotifyAlbumArtEl && spotifyAlbumArtFallbackEl) {
-            spotifyAlbumArtEl.classList.add("hidden");
+          if (spotifyAlbumEl) spotifyAlbumEl.textContent = "-";
+          if (spotifyAlbumArtEl) spotifyAlbumArtEl.classList.add("hidden");
+          if (spotifyAlbumArtFallbackEl)
             spotifyAlbumArtFallbackEl.classList.remove("hidden");
-          }
           if (spotifyTimeElapsedEl) spotifyTimeElapsedEl.textContent = "0:00";
           if (spotifyTimeTotalEl) spotifyTimeTotalEl.textContent = "0:00";
           if (spotifyProgressBarEl) spotifyProgressBarEl.style.width = "0%";
         }
+
+        // Fetch Last Played Song directly from Firebase Realtime Database
+        getLastPlayedTrackFromFirebase().then((fbTrack) => {
+          if (fbTrack && fbTrack.song) {
+            renderLastPlayedUI({
+              song: fbTrack.song,
+              artist: fbTrack.artist,
+              album: fbTrack.album || "",
+              album_art_url: fbTrack.albumArtUrl || "",
+              track_id: fbTrack.trackId,
+            });
+          } else {
+            renderOfflineUI();
+          }
+        });
       }
 
       // 3. Game Playing / Activity Presence
