@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { SITE_CONFIG } from "../config";
 import ParticlesBackground from "../components/ParticlesBackground.astro";
+
 interface Props {
   title?: string;
   description?: string;
@@ -43,7 +44,7 @@ const { title = "Nivin", description = SITE_CONFIG.description } = Astro.props;
   <body
     class="bg-dracula-bg text-dracula-fg antialiased selection:bg-dracula-selection selection:text-dracula-pink relative min-h-screen flex flex-col overflow-x-hidden w-full max-w-full"
   >
-    <!-- Subtle Background Glow Orbs -->
+    <!-- Background Glow Orbs -->
     <div
       class="fixed top-0 left-1/4 w-96 h-96 bg-dracula-purple/10 rounded-full blur-[120px] pointer-events-none z-0"
     >
@@ -53,9 +54,12 @@ const { title = "Nivin", description = SITE_CONFIG.description } = Astro.props;
     >
     </div>
 
-    <!-- Interactive tsParticles Layer -->
+    <!-- Pure Dracula Particles Background -->
     <ParticlesBackground />
 
-    <slot />
+    <!-- Main Portfolio Content Layer -->
+    <div class="relative z-10 flex flex-col min-h-screen w-full">
+      <slot />
+    </div>
   </body>
 </html>
