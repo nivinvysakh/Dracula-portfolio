@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
 import ContributionGraph from '../components/ContributionGraph.astro';
+import PrActivityWidget from '../components/PrActivityWidget.astro';
 import LanyardWidget from '../components/LanyardWidget.astro';
 import Skills from '../components/Skills.astro';
 import Collab from '../components/Collab.astro';
@@ -31,6 +32,9 @@ import { SITE_CONFIG } from '../config';
 
       <LanyardWidget discordId={SITE_CONFIG.discordId} />
     </div>
+
+    <!-- Live GitHub PRs & Open Source Activity -->
+    <PrActivityWidget />
 
     <Skills />
     <Collab />

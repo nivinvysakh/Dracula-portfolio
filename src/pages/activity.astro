@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import PrActivityWidget from '../components/PrActivityWidget.astro';
+import ContributionGraph from '../components/ContributionGraph.astro';
+import LanyardWidget from '../components/LanyardWidget.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_CONFIG } from '../config';
+---
+
+<Layout title="PR & Activity | Nivin" description="Live GitHub Pull Requests, open-source activity events, contribution graphs, and real-time Spotify/Discord presence.">
+  <Navbar />
+  
+  <main class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-8 overflow-x-hidden">
+    <!-- Header Title Section -->
+    <div class="dracula-glass rounded-xl p-6 border border-dracula-selection/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 font-mono text-xs text-dracula-purple font-bold mb-1">
+          <span>&lt;github / nivinvysakh&gt;</span>
+        </div>
+        <h1 class="font-sans text-2xl sm:text-3xl font-extrabold text-dracula-fg tracking-tight">
+          PRs & Activity Feed
+        </h1>
+        <p class="font-mono text-xs text-dracula-comment mt-1">
+          Tracking pull requests, repository events, open-source contributions, and live developer status.
+        </p>
+      </div>
+
+      <a
+        href="https://github.com/nivinvysakh"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 font-mono text-xs px-4 py-2 rounded-lg bg-dracula-selection/50 text-dracula-cyan hover:bg-dracula-selection border border-dracula-cyan/30 transition-all shrink-0 self-start md:self-auto"
+      >
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path>
+        </svg>
+        <span>GitHub Profile</span>
+      </a>
+    </div>
+
+    <!-- Main Live GitHub PRs & Activity Feed Widget -->
+    <PrActivityWidget />
+
+    <!-- Live Automation Pipeline (Contribution Analytics & Spotify Presence) -->
+    <div class="space-y-6 pt-4">
+      <div class="flex items-center justify-between font-mono text-xs text-dracula-comment border-b border-dracula-selection/40 pb-2">
+        <span class="flex items-center gap-2 font-bold text-dracula-fg text-sm">
+          ⚡ Contribution Analytics & Live Presence
+        </span>
+        <span class="text-[11px] text-dracula-cyan">Live Sync</span>
+      </div>
+
+      <ContributionGraph />
+
+      <LanyardWidget discordId={SITE_CONFIG.discordId} />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

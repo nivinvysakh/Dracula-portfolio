@@ -10,13 +10,13 @@ export const SITE_CONFIG = {
 
   // Firebase Realtime Database Environment Config
   firebaseConfig: {
-    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY || "",
-    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN || "",
-    databaseURL: import.meta.env.PUBLIC_FIREBASE_DATABASE_URL || "",
-    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID || "",
-    storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET || "",
-    messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
-    appId: import.meta.env.PUBLIC_FIREBASE_APP_ID || "",
+    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY || "AIzaSyDzEWLZuWSZYGj0g09rinWbCQ2G-DPyrzQ",
+    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN || "portfoliowebsitedata-20961.firebaseapp.com",
+    databaseURL: import.meta.env.PUBLIC_FIREBASE_DATABASE_URL || "https://portfoliowebsitedata-20961-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID || "portfoliowebsitedata-20961",
+    storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET || "portfoliowebsitedata-20961.firebasestorage.app",
+    messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "590785459682",
+    appId: import.meta.env.PUBLIC_FIREBASE_APP_ID || "1:590785459682:web:f617b15491ea36890ef5bb",
   },
 
   favoriteSongs: [

@@ -18,8 +18,18 @@ jobs:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
-      - name: Enable GitHub Native Auto-Merge
-        run: gh pr merge --auto --squash "$PR_URL"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git Author Credit
+        run: |
+          git config --global user.name "Nivin Vysakh"
+          git config --global user.email "nivinvysakh@icloud.com"
+
+      - name: Approve and Enable Native Auto-Merge
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
