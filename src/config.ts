@@ -138,18 +138,19 @@ export const SITE_CONFIG = {
       archived: true,
     },
     {
-      title: "Antigravity Ci",
+      title: "Orbit CI",
       description:
-        "Autonomous AI Pull Request Assistant for GitHub powered by Google Gemini",
-      tags: ["Python", "DevOps", "GitHub Actions", "Google Gemini"],
-      github: "https://github.com/nivinvysakh/AntigravityCi",
+        "Autonomous AI Pull Request Assistant for GitHub powered by Google Gemini ♊",
+      tags: ["JavaScript", "DevOps", "GitHub Actions", "Google Gemini"],
+      github: "https://github.com/nivinvysakh/OrbitCi",
       openForCollab: true,
     },
     {
-      title: "bottom_bar_with_sheet",
-      description: "Flutter custom BottomBar Navigation Widget",
-      tags: ["c++", "Dart", "Flutter", "CMake", "C"],
-      github: "https://github.com/Frezyx/bottom_bar_with_sheet",
+      title: "SyncMyDep",
+      description:
+        "Checks package.json lockfile issues, auto-fixes desync and vulnerabilities, and opens a Pull Request",
+      tags: ["Node.js", "TypeScript", "GitHub Actions"],
+      github: "https://github.com/nivinvysakh/syncmydep",
       openForCollab: true,
     },
   ],
