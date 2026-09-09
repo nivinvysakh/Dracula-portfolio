@@ -15,7 +15,7 @@
     "@tsparticles/astro": "^4.4.0",
     "@tsparticles/engine": "^4.3.2",
     "@tsparticles/slim": "^4.4.0",
-    "astro": "^7.2.10",
+    "astro": "^7.3.2",
     "firebase": "^12.18.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.5.4"

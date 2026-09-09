@@ -138,11 +138,12 @@ export const SITE_CONFIG = {
       archived: true,
     },
     {
-      title: "Orbit CI",
+      title: "GH-TREE",
       description:
-        "Autonomous AI Pull Request Assistant for GitHub powered by Google Gemini ♊",
-      tags: ["JavaScript", "DevOps", "GitHub Actions", "Google Gemini"],
-      github: "https://github.com/nivinvysakh/OrbitCi",
+        "Build a Minecraft tree on GitHub using your GitHub activity",
+      tags: ["TypeScript", "GitHub Actions", "GitHub API"],
+      github: "https://github.com/nivinvysakh/gh-tree",
+      demo : "https://nivinvysakh.github.io/gh-tree/",
       openForCollab: true,
     },
     {
