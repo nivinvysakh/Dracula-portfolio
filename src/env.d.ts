@@ -1,9 +1,5 @@
 /// <reference path="../.astro/types.d.ts" />
 
-interface Window {
-  particlesInit?: (engine: import("@tsparticles/engine").Engine) => Promise<void>;
-}
-
 interface ImportMetaEnv {
   readonly PUBLIC_FIREBASE_API_KEY: string;
   readonly PUBLIC_FIREBASE_AUTH_DOMAIN: string;
