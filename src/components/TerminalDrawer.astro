@@ -1,0 +1,428 @@
+---
+---
+
+<div id="terminal-drawer-root" class="relative z-50">
+  <!-- Persistent Floating CLI Trigger Pill -->
+  <button
+    id="terminal-trigger-btn"
+    class="fixed bottom-6 right-6 z-40 group flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-dracula-current/90 hover:bg-dracula-current text-dracula-cyan border border-dracula-cyan/30 hover:border-dracula-cyan/70 shadow-lg shadow-dracula-cyan/10 hover:shadow-dracula-cyan/20 backdrop-blur-md transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer"
+    aria-label="Open Interactive Cyber Terminal"
+    title="Open Cyber Terminal (Cmd+K or Ctrl+~)"
+  >
+    <span class="relative flex h-2.5 w-2.5">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-dracula-cyan opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-dracula-cyan"></span>
+    </span>
+    <span class="font-mono text-xs font-bold tracking-wider uppercase text-dracula-fg group-hover:text-dracula-cyan transition-colors">
+      &gt;_ CLI
+    </span>
+    <span class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono rounded bg-dracula-bg/60 text-dracula-comment border border-dracula-comment/30">
+      ⌘K
+    </span>
+  </button>
+
+  <!-- Modal / Drawer Backdrop & Window -->
+  <div
+    id="terminal-backdrop"
+    class="fixed inset-0 bg-dracula-bg/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-6 opacity-0 pointer-events-none transition-all duration-300"
+  >
+    <div
+      id="terminal-window"
+      class="w-full max-w-3xl h-[85vh] max-h-[620px] bg-dracula-bg/95 border border-dracula-purple/40 rounded-xl shadow-2xl shadow-dracula-purple/20 flex flex-col overflow-hidden transform scale-95 transition-all duration-300"
+    >
+      <!-- Terminal Header Bar -->
+      <div class="px-4 py-3 bg-dracula-current/80 border-b border-dracula-comment/30 flex items-center justify-between select-none">
+        <div class="flex items-center gap-2">
+          <button id="terminal-close-btn" class="w-3 h-3 rounded-full bg-dracula-red hover:opacity-80 transition-opacity" title="Close (ESC)"></button>
+          <div class="w-3 h-3 rounded-full bg-dracula-yellow opacity-80"></div>
+          <div class="w-3 h-3 rounded-full bg-dracula-green opacity-80"></div>
+          <span class="ml-2 font-mono text-xs text-dracula-comment flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-dracula-purple animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            nivin@dracula-box: ~ (zsh)
+          </span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-block font-mono text-[11px] text-dracula-comment">
+            Type <code class="text-dracula-green font-bold">cat bio.txt</code> or <code class="text-dracula-cyan font-bold">help</code>
+          </span>
+          <button
+            id="terminal-close-text"
+            class="text-dracula-comment hover:text-dracula-fg font-mono text-xs px-2 py-0.5 rounded hover:bg-dracula-comment/20 transition-colors"
+          >
+            [ESC]
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Interactive Command Chips Bar -->
+      <div class="px-4 py-2 bg-dracula-current/40 border-b border-dracula-comment/20 flex items-center gap-2 overflow-x-auto select-none font-mono text-[11px]">
+        <span class="text-dracula-comment text-[10px] uppercase font-bold mr-1 hidden sm:inline">QUICK RUN:</span>
+        <button data-quick-cmd="cat bio.txt" class="term-quick-chip px-2 py-0.5 rounded bg-dracula-cyan/10 hover:bg-dracula-cyan/20 text-dracula-cyan border border-dracula-cyan/30 transition-all cursor-pointer">
+          cat bio.txt
+        </button>
+        <button data-quick-cmd="neofetch" class="term-quick-chip px-2 py-0.5 rounded bg-dracula-pink/10 hover:bg-dracula-pink/20 text-dracula-pink border border-dracula-pink/30 transition-all cursor-pointer">
+          neofetch
+        </button>
+        <button data-quick-cmd="skills" class="term-quick-chip px-2 py-0.5 rounded bg-dracula-green/10 hover:bg-dracula-green/20 text-dracula-green border border-dracula-green/30 transition-all cursor-pointer">
+          skills
+        </button>
+        <button data-quick-cmd="ping aws" class="term-quick-chip px-2 py-0.5 rounded bg-dracula-yellow/10 hover:bg-dracula-yellow/20 text-dracula-yellow border border-dracula-yellow/30 transition-all cursor-pointer">
+          ping aws
+        </button>
+        <button data-quick-cmd="clear" class="term-quick-chip px-2 py-0.5 rounded bg-dracula-comment/10 hover:bg-dracula-comment/20 text-dracula-comment border border-dracula-comment/30 transition-all cursor-pointer">
+          clear
+        </button>
+      </div>
+
+      <!-- Terminal Body / Scroll Output -->
+      <div
+        id="terminal-output"
+        class="flex-1 p-4 font-mono text-xs sm:text-sm overflow-y-auto space-y-3 text-dracula-fg selection:bg-dracula-selection selection:text-dracula-pink"
+      >
+        <!-- Welcome Banner -->
+        <div class="text-dracula-purple font-semibold flex items-center justify-between">
+          <span>Dracula Cyber Shell v2.5.0 (x86_64-apple-darwin22.0)</span>
+          <span class="text-[10px] text-dracula-green font-mono">[● LIVE INTERACTIVE]</span>
+        </div>
+        <div class="text-dracula-comment text-xs">
+          Click any quick pill above or type <span class="text-dracula-cyan font-bold">cat bio.txt</span> / <span class="text-dracula-pink font-bold">neofetch</span> for interactive system info.
+        </div>
+        <div class="border-b border-dracula-comment/20 my-1"></div>
+      </div>
+
+      <!-- Terminal Input Line -->
+      <div class="p-3 bg-dracula-current/40 border-t border-dracula-comment/30 flex items-center gap-2 font-mono text-xs sm:text-sm">
+        <span class="text-dracula-green font-bold select-none">nivin@dracula-box</span>
+        <span class="text-dracula-comment select-none">:</span>
+        <span class="text-dracula-cyan font-bold select-none">~</span>
+        <span class="text-dracula-pink font-bold select-none animate-pulse">$</span>
+        <input
+          type="text"
+          id="terminal-input"
+          class="flex-1 bg-transparent border-none outline-none text-dracula-fg font-mono placeholder-dracula-comment/50 caret-dracula-pink"
+          placeholder="Type command here (e.g. cat bio.txt)..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { SITE_CONFIG } from "../config";
+
+  function initTerminal() {
+    const triggerBtn = document.getElementById('terminal-trigger-btn');
+    const backdrop = document.getElementById('terminal-backdrop');
+    const windowEl = document.getElementById('terminal-window');
+    const closeBtn = document.getElementById('terminal-close-btn');
+    const closeText = document.getElementById('terminal-close-text');
+    const outputEl = document.getElementById('terminal-output');
+    const inputEl = document.getElementById('terminal-input') as HTMLInputElement | null;
+    const quickChips = document.querySelectorAll('.term-quick-chip');
+
+    if (!triggerBtn || !backdrop || !windowEl || !outputEl || !inputEl) return;
+
+    let history: string[] = [];
+    let historyIndex = -1;
+    let isOpen = false;
+
+    function openTerminal() {
+      isOpen = true;
+      backdrop?.classList.remove('opacity-0', 'pointer-events-none');
+      backdrop?.classList.add('opacity-100', 'pointer-events-auto');
+      windowEl?.classList.remove('scale-95');
+      windowEl?.classList.add('scale-100');
+      setTimeout(() => inputEl?.focus(), 100);
+    }
+
+    function closeTerminal() {
+      isOpen = false;
+      backdrop?.classList.remove('opacity-100', 'pointer-events-auto');
+      backdrop?.classList.add('opacity-0', 'pointer-events-none');
+      windowEl?.classList.remove('scale-100');
+      windowEl?.classList.add('scale-95');
+    }
+
+    triggerBtn.addEventListener('click', openTerminal);
+    closeBtn?.addEventListener('click', closeTerminal);
+    closeText?.addEventListener('click', closeTerminal);
+
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeTerminal();
+    });
+
+    // Keyboard Shortcuts (Cmd+K, Ctrl+~, ESC)
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        isOpen ? closeTerminal() : openTerminal();
+      } else if (e.ctrlKey && e.key === '`') {
+        e.preventDefault();
+        isOpen ? closeTerminal() : openTerminal();
+      } else if (e.key === 'Escape' && isOpen) {
+        closeTerminal();
+      }
+    });
+
+    // Quick Command Chip Click Handlers
+    quickChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const cmd = chip.getAttribute('data-quick-cmd');
+        if (cmd) {
+          executeCommand(cmd);
+          inputEl.focus();
+        }
+      });
+    });
+
+    // Helper to print lines
+    function printLine(htmlContent: string) {
+      if (!outputEl) return;
+      const line = document.createElement('div');
+      line.className = 'leading-relaxed text-xs sm:text-sm animate-fade-in';
+      line.innerHTML = htmlContent;
+      outputEl.appendChild(line);
+      outputEl.scrollTop = outputEl.scrollHeight;
+    }
+
+    // Command Handlers
+    function executeCommand(cmdRaw: string) {
+      const cmdTrimmed = cmdRaw.trim();
+      if (!cmdTrimmed) return;
+
+      history.push(cmdTrimmed);
+      historyIndex = history.length;
+
+      // Echo command line
+      printLine(
+        `<span class="text-dracula-green font-bold">nivin@dracula-box</span>:<span class="text-dracula-cyan">~</span>$ <span class="text-dracula-fg">${escapeHtml(cmdTrimmed)}</span>`
+      );
+
+      const parts = cmdTrimmed.split(' ').filter(Boolean);
+      const mainCmd = parts[0]?.toLowerCase();
+      const arg = parts[1]?.toLowerCase();
+
+      switch (mainCmd) {
+        case 'help':
+          printLine(`
+            <div class="text-dracula-yellow font-bold my-1 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-dracula-yellow animate-ping"></span>
+              AVAILABLE CYBER COMMANDS:
+            </div>
+            <table class="w-full max-w-lg border-collapse text-xs">
+              <tr><td class="text-dracula-cyan py-1 font-bold w-32">cat bio.txt</td><td class="text-dracula-comment">Render rich animated DevOps profile & mission card</td></tr>
+              <tr><td class="text-dracula-cyan py-1 font-bold">neofetch</td><td class="text-dracula-comment">Display Dracula OS specs & profile summary</td></tr>
+              <tr><td class="text-dracula-cyan py-1 font-bold">skills</td><td class="text-dracula-comment">List DevOps, Cloud & Engineering skills</td></tr>
+              <tr><td class="text-dracula-cyan py-1 font-bold">projects</td><td class="text-dracula-comment">Show key open-source projects & repos</td></tr>
+              <tr><td class="text-dracula-cyan py-1 font-bold">prs</td><td class="text-dracula-comment">View GitHub pull requests status</td></tr>
+              <tr><td class="text-dracula-cyan py-1 font-bold">ping [target]</td><td class="text-dracula-comment">Simulate real-time streaming ping (e.g. ping aws)</td></tr>
+              <tr><td class="text-dracula-cyan py-1 font-bold">cat contact.txt</td><td class="text-dracula-comment">Get email & social links</td></tr>
+              <tr><td class="text-dracula-cyan py-1 font-bold">clear</td><td class="text-dracula-comment">Clear terminal screen</td></tr>
+              <tr><td class="text-dracula-cyan py-1 font-bold">exit</td><td class="text-dracula-comment">Close terminal drawer</td></tr>
+            </table>
+          `);
+          break;
+
+        case 'neofetch':
+          printLine(`
+            <div class="flex flex-col sm:flex-row gap-4 my-2 text-xs">
+              <pre class="text-dracula-purple font-bold leading-tight select-none">
+  .----------------.
+ |   N I V I N    |
+ |   DEVOPS &     |
+ |   PLATFORM     |
+  '----------------'
+              </pre>
+              <div class="space-y-1">
+                <div><span class="text-dracula-pink font-bold">nivin</span>@<span class="text-dracula-purple font-bold">dracula-box</span></div>
+                <div class="text-dracula-comment">-------------------------</div>
+                <div><span class="text-dracula-cyan font-bold">Role:</span> ${SITE_CONFIG.title}</div>
+                <div><span class="text-dracula-cyan font-bold">OS:</span> macOS / Linux (Dracula Cyber Kernel 6.1)</div>
+                <div><span class="text-dracula-cyan font-bold">Uptime:</span> 99.99% (GitHub Actions CI/CD)</div>
+                <div><span class="text-dracula-cyan font-bold">Shell:</span> zsh 5.9 (x86_64-apple-darwin22.0)</div>
+                <div><span class="text-dracula-cyan font-bold">Cloud Stack:</span> AWS, Kubernetes, Terraform, Docker</div>
+                <div><span class="text-dracula-cyan font-bold">Languages:</span> Go, Python, TypeScript, Bash</div>
+                <div><span class="text-dracula-cyan font-bold">Live Status:</span> Synced with Firebase Realtime DB</div>
+              </div>
+            </div>
+          `);
+          break;
+
+        case 'skills':
+          printLine(`
+            <div class="text-dracula-green font-bold my-1">TECH STACK & SKILLS:</div>
+            ${SITE_CONFIG.skills.map(s => `
+              <div class="mb-1.5">
+                <span class="text-dracula-pink font-bold">${escapeHtml(s.category)}:</span>
+                <span class="text-dracula-fg"> ${s.items.map(i => `<code class="px-1 py-0.5 bg-dracula-current/50 rounded text-dracula-cyan text-xs mr-1">${escapeHtml(i)}</code>`).join('')}</span>
+              </div>
+            `).join('')}
+          `);
+          break;
+
+        case 'projects':
+          printLine(`
+            <div class="text-dracula-cyan font-bold my-1">KEY PROJECTS:</div>
+            <div class="space-y-2">
+              ${SITE_CONFIG.projects.map(p => `
+                <div class="p-2 rounded bg-dracula-current/30 border border-dracula-comment/20">
+                  <div class="flex items-center justify-between">
+                    <span class="text-dracula-green font-bold">${escapeHtml(p.title)}</span>
+                    <a href="${p.github}" target="_blank" rel="noopener noreferrer" class="text-dracula-purple hover:underline text-xs">[GitHub ↗]</a>
+                  </div>
+                  <div class="text-dracula-comment text-xs mt-0.5">${escapeHtml(p.description)}</div>
+                  <div class="flex gap-1 mt-1">
+                    ${p.tags.map(t => `<span class="text-[10px] px-1 bg-dracula-purple/20 text-dracula-pink rounded">${escapeHtml(t)}</span>`).join('')}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `);
+          break;
+
+        case 'prs':
+          printLine(`
+            <div class="text-dracula-purple font-bold my-1">PULL REQUEST STATUS:</div>
+            <div class="text-dracula-fg text-xs space-y-1">
+              <div><span class="text-dracula-green font-bold">✓ Merged:</span> Dependabot Auto-Merge Enabled (Git Credit: <span class="text-dracula-cyan">@nivinvysakh</span>)</div>
+              <div><span class="text-dracula-green font-bold">✓ CI/CD:</span> Astro 7 + Tailwind v4 Build Checks Passing</div>
+              <div><span class="text-dracula-yellow font-bold">★ Active Repo:</span> <a href="https://github.com/nivinvysakh/PortfolioWebsite" target="_blank" class="text-dracula-pink hover:underline">Dracula Portfolio Website</a></div>
+            </div>
+          `);
+          break;
+
+        case 'cat':
+          if (arg === 'bio.txt') {
+            printLine(`
+              <div class="my-2 p-4 rounded-xl bg-dracula-current/70 border border-dracula-cyan/50 shadow-xl shadow-dracula-cyan/10 space-y-3 font-mono text-xs">
+                <!-- Live Card Header -->
+                <div class="flex items-center justify-between border-b border-dracula-comment/30 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="relative flex h-2.5 w-2.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-dracula-green opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-dracula-green"></span>
+                    </span>
+                    <span class="text-dracula-green font-bold uppercase tracking-wider text-[11px]">DEVOPS ENGINEER SYSTEM BIO</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] bg-dracula-purple/20 text-dracula-pink border border-dracula-pink/30 font-bold">● ONLINE & BUILDING</span>
+                </div>
+
+                <!-- Rich Bio Profile Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-dracula-fg">
+                  <div>
+                    <span class="text-dracula-pink font-bold">OPERATOR:</span> Nivin Vysakh
+                  </div>
+                  <div>
+                    <span class="text-dracula-pink font-bold">ROLE:</span> ${escapeHtml(SITE_CONFIG.title)}
+                  </div>
+                  <div class="sm:col-span-2">
+                    <span class="text-dracula-pink font-bold">MISSION:</span> <span class="text-dracula-cyan font-bold">"${escapeHtml(SITE_CONFIG.tagline)}"</span>
+                  </div>
+                  <div class="sm:col-span-2 text-dracula-comment leading-relaxed bg-dracula-bg/60 p-2.5 rounded border border-dracula-comment/20">
+                    ${escapeHtml(SITE_CONFIG.description)}
+                  </div>
+                </div>
+
+                <!-- Live Audio / Equalizer Visual Bar -->
+                <div class="border-t border-dracula-comment/30 pt-2 flex items-center justify-between text-[11px]">
+                  <div class="flex items-center gap-2 text-dracula-yellow">
+                    <span class="flex items-end gap-0.5 h-3">
+                      <span class="w-1 bg-dracula-green rounded-full animate-bounce h-full"></span>
+                      <span class="w-1 bg-dracula-cyan rounded-full animate-pulse h-full"></span>
+                      <span class="w-1 bg-dracula-pink rounded-full animate-bounce h-full"></span>
+                    </span>
+                    <span class="font-bold">AUTOMATION PIPELINE: ACTIVE</span>
+                  </div>
+                  <span class="text-dracula-cyan font-bold">100% CLOUD READY</span>
+                </div>
+              </div>
+            `);
+          } else if (arg === 'contact.txt') {
+            printLine(`
+              <div class="text-xs space-y-1 my-1 p-3 rounded-lg bg-dracula-current/40 border border-dracula-purple/30">
+                <div><span class="text-dracula-pink font-bold">Email:</span> <a href="mailto:${SITE_CONFIG.email}" class="text-dracula-cyan underline">${SITE_CONFIG.email}</a></div>
+                <div><span class="text-dracula-pink font-bold">Discord ID:</span> <code class="text-dracula-yellow">${SITE_CONFIG.discordId}</code></div>
+                ${SITE_CONFIG.socials.map(soc => `
+                  <div><span class="text-dracula-pink font-bold">${escapeHtml(soc.name)}:</span> <a href="${soc.url}" target="_blank" class="text-dracula-purple underline">${soc.url}</a></div>
+                `).join('')}
+              </div>
+            `);
+          } else {
+            printLine(`<span class="text-dracula-red">cat: ${escapeHtml(parts[1] || '')}: No such file. Try <code class="text-dracula-cyan font-bold">cat bio.txt</code> or <code class="text-dracula-cyan font-bold">cat contact.txt</code></span>`);
+          }
+          break;
+
+        case 'ping':
+          const targetHost = parts[1] || 'aws.amazon.com';
+          printLine(`<div class="text-xs font-mono text-dracula-cyan">PING ${escapeHtml(targetHost)} (52.95.245.1): 56 data bytes</div>`);
+
+          // Stream real pings sequentially with delays
+          let pingCount = 0;
+          const pingInterval = setInterval(() => {
+            pingCount++;
+            const latency = (Math.random() * 12 + 10).toFixed(1);
+            printLine(`<div class="text-xs font-mono text-dracula-fg">64 bytes from 52.95.245.1: icmp_seq=${pingCount} ttl=118 time=${latency} ms</div>`);
+
+            if (pingCount >= 3) {
+              clearInterval(pingInterval);
+              printLine(`<div class="text-xs font-mono text-dracula-green font-bold">--- ${escapeHtml(targetHost)} ping statistics --- 3 packets transmitted, 3 received, 0.0% packet loss</div>`);
+            }
+          }, 300);
+          break;
+
+        case 'clear':
+          if (outputEl) outputEl.innerHTML = '';
+          break;
+
+        case 'exit':
+        case 'quit':
+          closeTerminal();
+          break;
+
+        default:
+          printLine(`
+            <span class="text-dracula-red">zsh: command not found: ${escapeHtml(mainCmd)}. Type <span class="text-dracula-cyan font-bold">help</span> or click <span class="text-dracula-pink font-bold">cat bio.txt</span>.</span>
+          `);
+          break;
+      }
+    }
+
+    function escapeHtml(str: string) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const val = inputEl.value;
+        inputEl.value = '';
+        executeCommand(val);
+      } else if (e.key === 'ArrowUp') {
+        if (historyIndex > 0) {
+          historyIndex--;
+          inputEl.value = history[historyIndex] || '';
+        }
+      } else if (e.key === 'ArrowDown') {
+        if (historyIndex < history.length - 1) {
+          historyIndex++;
+          inputEl.value = history[historyIndex] || '';
+        } else {
+          historyIndex = history.length;
+          inputEl.value = '';
+        }
+      }
+    });
+  }
+
+  // Initialize on DOM load and page swaps
+  document.addEventListener('DOMContentLoaded', initTerminal);
+  document.addEventListener('astro:page-load', initTerminal);
+</script>

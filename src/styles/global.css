@@ -168,3 +168,33 @@
 .animate-equalizer-4 {
   animation: equalizerBar 0.75s ease-in-out infinite 0.45s;
 }
+
+/* Alive SVG Flowing Cable Dash Keyframes */
+@keyframes flowDash {
+  0% {
+    stroke-dashoffset: 24;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-flow-dash {
+  stroke-dasharray: 6 6;
+  animation: flowDash 1.2s linear infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.4;
+    filter: drop-shadow(0 0 2px #8be9fd);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px #8be9fd);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}

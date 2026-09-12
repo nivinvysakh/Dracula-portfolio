@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { SITE_CONFIG } from "../config";
+import TerminalDrawer from "../components/TerminalDrawer.astro";
 
 interface Props {
   title?: string;
@@ -57,5 +58,8 @@ const { title = "Nivin", description = SITE_CONFIG.description } = Astro.props;
     <div class="relative z-10 flex flex-col min-h-screen w-full">
       <slot />
     </div>
+
+    <!-- Dracula Cyber Terminal Floating Drawer -->
+    <TerminalDrawer />
   </body>
 </html>

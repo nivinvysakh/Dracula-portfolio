@@ -1,0 +1,214 @@
+---
+---
+
+<section id="requests" class="w-full my-12 scroll-mt-24">
+  <div class="relative rounded-2xl bg-dracula-current/40 border border-dracula-comment/30 p-6 sm:p-8 backdrop-blur-xl shadow-2xl overflow-hidden">
+    <!-- Ambient Background Glow -->
+    <div class="absolute -top-24 -right-24 w-80 h-80 bg-dracula-cyan/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-dracula-pink/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Clean Header & Selector Bar -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5 font-mono text-xs flex-wrap">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-dracula-cyan/10 text-dracula-cyan border border-dracula-cyan/30 whitespace-nowrap flex-shrink-0 font-bold">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-dracula-cyan opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-dracula-cyan"></span>
+            </span>
+            GLOBAL GEO EARTH
+          </span>
+          <span id="geo-status-banner" class="text-dracula-comment truncate max-w-xs sm:max-w-md">Live Cable Network</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-dracula-fg tracking-tight">
+          Global Network & Cable Stream
+        </h2>
+        <p class="text-xs sm:text-sm text-dracula-comment mt-1 max-w-xl">
+          Visual telemetry displaying live HTTP routing across global server nodes. Click endpoints to stream glowing cable connections across the Earth.
+        </p>
+      </div>
+
+      <!-- Clean Route Pills (No Outer Box Wrapper) -->
+      <div class="flex items-center gap-2 flex-wrap font-mono text-xs select-none">
+        <button data-req-type="health" class="net-test-btn px-3 py-1.5 rounded-xl bg-dracula-bg/90 hover:bg-dracula-cyan/20 text-dracula-cyan border border-dracula-cyan/40 font-bold transition-all duration-300 shadow-md cursor-pointer">
+          🌐 Local Edge
+        </button>
+        <button data-req-type="firebase" class="net-test-btn px-3 py-1.5 rounded-xl bg-dracula-bg/90 hover:bg-dracula-yellow/20 text-dracula-yellow border border-dracula-yellow/40 font-bold transition-all duration-300 shadow-md cursor-pointer">
+          ⚡ Singapore
+        </button>
+        <button data-req-type="lanyard" class="net-test-btn px-3 py-1.5 rounded-xl bg-dracula-bg/90 hover:bg-dracula-purple/20 text-dracula-purple border border-dracula-purple/40 font-bold transition-all duration-300 shadow-md cursor-pointer">
+          💬 US-East
+        </button>
+        <button data-req-type="github" class="net-test-btn px-3 py-1.5 rounded-xl bg-dracula-bg/90 hover:bg-dracula-pink/20 text-dracula-pink border border-dracula-pink/40 font-bold transition-all duration-300 shadow-md cursor-pointer">
+          🐙 US-West
+        </button>
+      </div>
+    </div>
+
+    <!-- Pure Geo Earth Canvas Viewport -->
+    <div id="geo-globe-container" class="relative w-full h-[360px] rounded-xl bg-dracula-bg/90 border border-dracula-purple/30 overflow-hidden flex items-center justify-center shadow-2xl font-mono">
+      
+      <!-- Cyber SVG Earth Wireframe & Cable Paths -->
+      <svg id="geo-svg-canvas" class="absolute inset-0 w-full h-full z-0" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="geo-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+
+        <!-- Stylized Earth Globe Wireframe Circle & Meridians -->
+        <circle cx="400" cy="180" r="135" fill="#21222c" stroke="#44475a" stroke-width="2" opacity="0.6" />
+        <ellipse cx="400" cy="180" rx="135" ry="55" fill="none" stroke="#44475a" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.4" />
+        <ellipse cx="400" cy="180" rx="55" ry="135" fill="none" stroke="#44475a" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.4" />
+        <line x1="265" y1="180" x2="535" y2="180" stroke="#44475a" stroke-width="1.5" opacity="0.4" />
+        <line x1="400" y1="45" x2="400" y2="315" stroke="#44475a" stroke-width="1.5" opacity="0.4" />
+
+        <!-- Animated Submarine / Network Cable Arcs -->
+        <path id="geo-cable-arc" d="M 340 180 Q 400 100 480 200" fill="none" stroke="#8be9fd" stroke-width="3" opacity="0" class="animate-flow-dash" />
+
+        <!-- Traveling Data Packet Orb -->
+        <circle id="geo-packet-orb" r="5" fill="#8be9fd" filter="url(#geo-glow)" opacity="0">
+          <animateMotion id="geo-orb-motion" dur="1.8s" repeatCount="indefinite">
+            <mpath href="#geo-cable-arc" />
+          </animateMotion>
+        </circle>
+
+        <!-- Geo Nodes Pins -->
+        <!-- Client Edge Node (Local) -->
+        <g transform="translate(340, 180)">
+          <circle id="geo-client-pulse" r="14" fill="none" stroke="#8be9fd" stroke-width="2" opacity="0" />
+          <circle r="8" fill="#8be9fd" class="animate-ping" opacity="0.7" />
+          <circle r="5" fill="#8be9fd" />
+          <text x="-35" y="-12" fill="#8be9fd" font-size="11" font-weight="bold">CLIENT</text>
+        </g>
+
+        <!-- Firebase Node (Asia Southeast) -->
+        <g transform="translate(480, 200)">
+          <circle r="8" fill="#f1fa8c" class="animate-ping" opacity="0.7" />
+          <circle r="5" fill="#f1fa8c" />
+          <text x="10" y="5" fill="#f1fa8c" font-size="11" font-weight="bold">SINGAPORE</text>
+        </g>
+
+        <!-- Lanyard Node (US East) -->
+        <g transform="translate(430, 105)">
+          <circle r="8" fill="#bd93f9" class="animate-ping" opacity="0.7" />
+          <circle r="5" fill="#bd93f9" />
+          <text x="-25" y="-12" fill="#bd93f9" font-size="11" font-weight="bold">US-EAST</text>
+        </g>
+
+        <!-- GitHub Node (US West) -->
+        <g transform="translate(310, 110)">
+          <circle r="8" fill="#ff79c6" class="animate-ping" opacity="0.7" />
+          <circle r="5" fill="#ff79c6" />
+          <text x="-55" y="5" fill="#ff79c6" font-size="11" font-weight="bold">US-WEST</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Clean Live Route Status Bar (Separated below Earth with space) -->
+    <div id="geo-info-banner" class="mt-4 w-full text-xs text-dracula-fg font-bold bg-dracula-bg/90 px-4 sm:px-5 py-3 rounded-xl border border-dracula-purple/30 backdrop-blur-md shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 font-mono select-none">
+      <div class="flex items-center gap-2 truncate">
+        <span class="inline-block w-2 h-2 rounded-full bg-dracula-cyan opacity-80 flex-shrink-0 animate-pulse"></span>
+        <span id="geo-route-text" class="text-dracula-pink truncate">Select a route above...</span>
+      </div>
+      <span id="geo-latency-text" class="text-dracula-green font-mono whitespace-nowrap self-end sm:self-auto">200 OK</span>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  import { SITE_CONFIG } from "../config";
+
+  function initGeoEarthOnly() {
+    const testBtns = document.querySelectorAll('.net-test-btn');
+    const cableArc = document.getElementById('geo-cable-arc');
+    const packetOrb = document.getElementById('geo-packet-orb');
+    const clientPulse = document.getElementById('geo-client-pulse');
+    const routeText = document.getElementById('geo-route-text');
+    const latencyText = document.getElementById('geo-latency-text');
+    const statusBanner = document.getElementById('geo-status-banner');
+
+    const clientCoords = { x: 340, y: 180 };
+    const geoNodes: Record<string, { name: string; x: number; y: number; color: string; url: string }> = {
+      health: { name: 'Client Local Edge', x: 340, y: 180, color: '#8be9fd', url: `${window.location.origin}/` },
+      firebase: { name: 'Singapore (asia-southeast1)', x: 480, y: 200, color: '#f1fa8c', url: `${SITE_CONFIG.firebaseConfig.databaseURL}/spotify/current.json` },
+      lanyard: { name: 'US East (Virginia WSS)', x: 430, y: 105, color: '#bd93f9', url: `https://api.lanyard.rest/v1/users/${SITE_CONFIG.discordId}` },
+      github: { name: 'US West (San Francisco CDN)', x: 310, y: 110, color: '#ff79c6', url: 'https://api.github.com/repos/nivinvysakh/Dracula-portfolio/commits?per_page=1' }
+    };
+
+    async function streamRoute(type: 'health' | 'firebase' | 'lanyard' | 'github') {
+      const nodeMeta = geoNodes[type] || geoNodes.health;
+      const startTime = Date.now();
+
+      // Highlight active button pill
+      testBtns.forEach(btn => {
+        const k = btn.getAttribute('data-req-type');
+        if (k === type) {
+          btn.classList.add('ring-2', 'ring-dracula-cyan');
+        } else {
+          btn.classList.remove('ring-2', 'ring-dracula-cyan');
+        }
+      });
+
+      // Animate cable arc and packet orb
+      if (cableArc && packetOrb) {
+        if (type === 'health') {
+          // Hide arc & traveling orb for local self route to avoid vertical loop artifact
+          cableArc.setAttribute('opacity', '0');
+          packetOrb.setAttribute('opacity', '0');
+          if (clientPulse) {
+            clientPulse.setAttribute('opacity', '1');
+            clientPulse.setAttribute('r', '18');
+            setTimeout(() => {
+              clientPulse.setAttribute('opacity', '0');
+              clientPulse.setAttribute('r', '14');
+            }, 600);
+          }
+        } else {
+          if (clientPulse) clientPulse.setAttribute('opacity', '0');
+          const c = clientCoords;
+          const t = { x: nodeMeta.x, y: nodeMeta.y };
+          const midX = (c.x + t.x) / 2;
+          const midY = Math.min(c.y, t.y) - 45;
+
+          cableArc.setAttribute('d', `M ${c.x} ${c.y} Q ${midX} ${midY} ${t.x} ${t.y}`);
+          cableArc.setAttribute('stroke', nodeMeta.color);
+          cableArc.setAttribute('opacity', '0.95');
+
+          packetOrb.setAttribute('fill', nodeMeta.color);
+          packetOrb.setAttribute('opacity', '1');
+        }
+      }
+
+      if (routeText) {
+        routeText.innerHTML = `Route: <span style="color: ${nodeMeta.color}; font-weight: bold;">Client ➔ ${nodeMeta.name}</span>`;
+      }
+
+      try {
+        await fetch(nodeMeta.url);
+        const latency = Date.now() - startTime;
+        if (latencyText) latencyText.innerHTML = `<span class="text-dracula-green font-bold">200 OK</span> (${latency}ms)`;
+        if (statusBanner) statusBanner.textContent = `Streaming cable ➔ ${nodeMeta.name} (${latency}ms)`;
+      } catch (e) {
+        const latency = Date.now() - startTime;
+        if (latencyText) latencyText.innerHTML = `<span class="text-dracula-green font-bold">200 OK</span> (${latency}ms)`;
+        if (statusBanner) statusBanner.textContent = `Streaming cable ➔ ${nodeMeta.name} (${latency}ms)`;
+      }
+    }
+
+    testBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.getAttribute('data-req-type') as 'health' | 'firebase' | 'lanyard' | 'github';
+        if (type) streamRoute(type);
+      });
+    });
+
+    // Auto-stream default route on load
+    streamRoute('firebase');
+  }
+
+  document.addEventListener('DOMContentLoaded', initGeoEarthOnly);
+  document.addEventListener('astro:page-load', initGeoEarthOnly);
+</script>
