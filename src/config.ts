@@ -1,15 +1,3 @@
-export interface RadioStation {
-  id: string;
-  name: string;
-  genre: string;
-  frequency: string;
-  type: "stream" | "youtube";
-  source: string;
-  logo: string;
-  description: string;
-  badge: string;
-}
-
 export interface FavoriteSong {
   song: string;
   artist: string;
@@ -76,7 +64,6 @@ export interface SiteConfig {
   techStack: TechStackItem[];
   skills: SkillCategory[];
   projects: ProjectItem[];
-  radioStations: RadioStation[];
 }
 
 export const SITE_CONFIG: SiteConfig = {
@@ -234,75 +221,6 @@ export const SITE_CONFIG: SiteConfig = {
       tags: ["Node.js", "TypeScript", "GitHub Actions"],
       github: "https://github.com/nivinvysakh/syncmydep",
       openForCollab: true,
-    },
-  ],
-
-  radioStations: [
-    {
-      id: "station-lofigirl",
-      name: "Lofi Girl Radio",
-      genre: "Lofi Hip Hop / Chill Beats",
-      frequency: "88.5 FM",
-      type: "youtube",
-      source: "jfKfPfyJRdk",
-      logo: "https://i.ytimg.com/vi/jfKfPfyJRdk/hqdefault.jpg",
-      description: "24/7 peaceful beats to relax, study & write code to",
-      badge: "POPULAR",
-    },
-    {
-      id: "station-synthwave",
-      name: "Synthwave / Chillwave FM",
-      genre: "Synthwave / Retrowave",
-      frequency: "92.3 FM",
-      type: "youtube",
-      source: "4xDzrJKXOOY",
-      logo: "https://i.ytimg.com/vi/4xDzrJKXOOY/hqdefault.jpg",
-      description: "Retro cyberpunk 80s neon synth vibes & midnight drift",
-      badge: "RETRO",
-    },
-    {
-      id: "station-nightwave",
-      name: "Nightwave Plaza Broadcast",
-      genre: "Vaporwave / Future Funk",
-      frequency: "95.7 FM",
-      type: "stream",
-      source: "https://radio.plaza.one/mp3",
-      logo: "https://plaza.one/static/images/logo.png",
-      description: "Iconic 24/7 internet vaporwave, mallsoft & future funk radio",
-      badge: "STREAM",
-    },
-    {
-      id: "station-groovesalad",
-      name: "SomaFM Groove Salad",
-      genre: "Ambient / Downtempo",
-      frequency: "101.5 FM",
-      type: "stream",
-      source: "https://ice1.somafm.com/groovesalad-128-mp3",
-      logo: "https://somafm.com/img3/groovesalad-400.jpg",
-      description: "A nicely chilled plate of ambient / downtempo electronica",
-      badge: "LIVE HD",
-    },
-    {
-      id: "station-animelofi",
-      name: "Anime Lofi Beats Live",
-      genre: "Anime Lofi / Chill",
-      frequency: "104.1 FM",
-      type: "youtube",
-      source: "7NOSDKb0HlU",
-      logo: "https://i.ytimg.com/vi/7NOSDKb0HlU/hqdefault.jpg",
-      description: "Japanese aesthetic, gentle piano & anime soundtrack lofi",
-      badge: "CHILL",
-    },
-    {
-      id: "station-dronezone",
-      name: "SomaFM Drone Zone",
-      genre: "Space Drone / Deep Ambient",
-      frequency: "106.8 FM",
-      type: "stream",
-      source: "https://ice1.somafm.com/dronezone-128-mp3",
-      logo: "https://somafm.com/img3/dronezone-400.jpg",
-      description: "Deep ambient space textures & cosmic electronic soundscapes",
-      badge: "FOCUS",
     },
   ],
 };

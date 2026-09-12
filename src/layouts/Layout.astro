@@ -1,7 +1,6 @@
 ---
 import "../styles/global.css";
 import { SITE_CONFIG } from "../config";
-import RadioWidget from "../components/RadioWidget.astro";
 
 interface Props {
   title?: string;
@@ -58,8 +57,5 @@ const { title = "Nivin", description = SITE_CONFIG.description } = Astro.props;
     <div class="relative z-10 flex flex-col min-h-screen w-full">
       <slot />
     </div>
-
-    <!-- Dracula Cyber Radio Widget Persistent Floating Pill & Deck -->
-    <RadioWidget />
   </body>
 </html>
