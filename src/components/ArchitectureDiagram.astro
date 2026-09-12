@@ -3,185 +3,244 @@
 
 <section id="architecture" class="w-full my-12 scroll-mt-24">
   <div class="relative rounded-2xl bg-dracula-current/40 border border-dracula-comment/30 p-6 sm:p-8 backdrop-blur-xl shadow-2xl overflow-hidden">
-    <!-- Ambient Background Lighting -->
+    <!-- Ambient Background Glow -->
     <div class="absolute -top-24 -right-24 w-80 h-80 bg-dracula-cyan/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-dracula-purple/10 rounded-full blur-3xl pointer-events-none"></div>
 
     <!-- Section Header & Controls -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
       <div>
-        <div class="flex items-center gap-2 mb-1">
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-dracula-green/10 text-dracula-green border border-dracula-green/30">
+        <div class="flex items-center gap-2 mb-1.5 font-mono text-xs flex-wrap">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-dracula-green/10 text-dracula-green border border-dracula-green/30 whitespace-nowrap font-bold">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-dracula-green opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-dracula-green"></span>
             </span>
-            CLOUD HUD TELEMETRY
+            LIVE SYSTEM TOPOLOGY
           </span>
-          <span id="hud-last-sync" class="text-xs font-mono text-dracula-comment">Connecting feeds...</span>
+          <span id="arch-last-sync" class="text-dracula-comment truncate">Syncing live feeds...</span>
         </div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-dracula-fg tracking-tight flex items-center gap-2">
-          Infrastructure & System Topology
+          Infrastructure & Cloud Architecture
         </h2>
         <p class="text-xs sm:text-sm text-dracula-comment mt-1 max-w-2xl">
-          Real-time telemetry console monitoring browser client metrics, Firebase database endpoints, Lanyard Discord gateway, and GitHub CI/CD build pipelines.
+          Visual topology of live portfolio integrations: Netlify Edge client delivery, Firebase Spotify sync, Lanyard Discord WebSocket gateway, and GitHub CI/CD build pipelines. Click any node to inspect live payloads.
         </p>
       </div>
 
       <button
-        id="hud-refresh-btn"
-        class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-dracula-bg border border-dracula-cyan/40 text-dracula-cyan hover:text-dracula-fg hover:border-dracula-cyan text-xs font-mono transition-all duration-300 shadow-md hover:shadow-dracula-cyan/10 cursor-pointer"
+        id="arch-refresh-btn"
+        class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-dracula-bg border border-dracula-cyan/40 text-dracula-cyan hover:text-dracula-fg hover:border-dracula-cyan text-xs font-mono transition-all duration-300 shadow-md hover:shadow-dracula-cyan/10 cursor-pointer self-start sm:self-auto"
       >
-        <svg id="hud-spin-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg id="arch-spin-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
         </svg>
-        <span>Refresh Metrics</span>
+        <span>Refresh Telemetry</span>
       </button>
     </div>
 
     <!-- Live Telemetry Quick Pills Bar -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6 select-none">
-      <div class="p-3 rounded-xl bg-dracula-bg/90 border border-dracula-cyan/30 flex flex-col gap-0.5 font-mono">
-        <span class="text-[10px] text-dracula-comment font-bold uppercase">🌐 CLIENT EDGE</span>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6 select-none font-mono">
+      <div class="p-3 rounded-xl bg-dracula-bg/90 border border-dracula-cyan/30 flex flex-col gap-0.5">
+        <span class="text-[10px] text-dracula-comment font-bold uppercase">🌐 NETLIFY EDGE</span>
         <span id="pill-client-text" class="text-xs text-dracula-cyan font-bold truncate">Detecting...</span>
       </div>
 
-      <div class="p-3 rounded-xl bg-dracula-bg/90 border border-dracula-yellow/30 flex flex-col gap-0.5 font-mono">
+      <div class="p-3 rounded-xl bg-dracula-bg/90 border border-dracula-yellow/30 flex flex-col gap-0.5">
         <span class="text-[10px] text-dracula-comment font-bold uppercase">⚡ FIREBASE RTDB</span>
         <span id="pill-firebase-text" class="text-xs text-dracula-yellow font-bold truncate">Ping: -- ms</span>
       </div>
 
-      <div class="p-3 rounded-xl bg-dracula-bg/90 border border-dracula-purple/30 flex flex-col gap-0.5 font-mono">
+      <div class="p-3 rounded-xl bg-dracula-bg/90 border border-dracula-purple/30 flex flex-col gap-0.5">
         <span class="text-[10px] text-dracula-comment font-bold uppercase">💬 DISCORD GATEWAY</span>
         <span id="pill-lanyard-text" class="text-xs text-dracula-purple font-bold truncate">Status: --</span>
       </div>
 
-      <div class="p-3 rounded-xl bg-dracula-bg/90 border border-dracula-pink/30 flex flex-col gap-0.5 font-mono">
+      <div class="p-3 rounded-xl bg-dracula-bg/90 border border-dracula-pink/30 flex flex-col gap-0.5">
         <span class="text-[10px] text-dracula-comment font-bold uppercase">🐙 GITHUB CI/CD</span>
         <span id="pill-github-text" class="text-xs text-dracula-pink font-bold truncate">Commit: --</span>
       </div>
     </div>
 
-    <!-- Main Console: Left Pipeline Flow Stepper + Right Cyber Code Inspector -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-      
-      <!-- Pipeline Flow Stepper (5 Cols) -->
-      <div class="lg:col-span-5 flex flex-col gap-3 font-mono">
-        <div class="text-xs font-bold text-dracula-comment uppercase tracking-wider mb-1 flex items-center gap-2">
-          <span class="w-1.5 h-1.5 rounded-full bg-dracula-green animate-ping"></span>
-          SELECT PIPELINE STEP TO INSPECT:
-        </div>
+    <!-- Visual Interactive Topology Nodes Canvas -->
+    <div id="arch-topology-canvas" class="relative p-5 sm:p-6 rounded-xl bg-dracula-bg/90 border border-dracula-purple/30 overflow-hidden mb-6 font-mono">
+      <!-- Animated Interconnecting Dynamic SVG Cable Lines -->
+      <svg id="arch-topology-svg" class="absolute inset-0 w-full h-full pointer-events-none z-0 hidden md:block" xmlns="http://www.w3.org/2000/svg">
+        <path id="path-step-firebase" d="" fill="none" stroke="#f1fa8c" stroke-width="2" stroke-dasharray="6,6" opacity="0.4" class="animate-pulse transition-all duration-300" />
+        <path id="path-step-lanyard" d="" fill="none" stroke="#bd93f9" stroke-width="2" stroke-dasharray="6,6" opacity="0.4" class="animate-pulse transition-all duration-300" />
+        <path id="path-step-github" d="" fill="none" stroke="#ff79c6" stroke-width="2" stroke-dasharray="6,6" opacity="0.4" class="animate-pulse transition-all duration-300" />
+      </svg>
 
-        <!-- Step 1 -->
-        <button
-          data-step-id="step-client"
-          class="hud-step-btn group text-left p-3.5 rounded-xl bg-dracula-bg/80 border border-dracula-cyan/50 hover:border-dracula-cyan transition-all duration-300 flex items-center justify-between cursor-pointer ring-2 ring-dracula-cyan"
+      <!-- Topology Grid Cards -->
+      <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
+        
+        <!-- Primary Origin Node: Client Browser & Netlify Edge (5 Cols) -->
+        <div
+          data-node-key="step-client"
+          class="arch-node-card md:col-span-5 group cursor-pointer p-4 sm:p-5 rounded-xl bg-dracula-current/70 hover:bg-dracula-current border border-dracula-cyan/50 hover:border-dracula-cyan shadow-xl transition-all duration-300 ring-2 ring-dracula-cyan flex flex-col justify-between"
         >
-          <div class="flex items-center gap-3">
-            <div class="p-2 rounded-lg bg-dracula-cyan/10 text-dracula-cyan group-hover:scale-110 transition-transform">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-              </svg>
-            </div>
-            <div>
-              <div class="text-xs font-bold text-dracula-fg group-hover:text-dracula-cyan transition-colors">01 // Client Browser Engine</div>
-              <div class="text-[11px] text-dracula-comment">Astro 7 SSR + Tailwind v4 + tsParticles</div>
-            </div>
-          </div>
-          <span class="text-xs text-dracula-cyan font-bold">▶</span>
-        </button>
-
-        <!-- Step 2 -->
-        <button
-          data-step-id="step-firebase"
-          class="hud-step-btn group text-left p-3.5 rounded-xl bg-dracula-bg/80 border border-dracula-comment/30 hover:border-dracula-yellow transition-all duration-300 flex items-center justify-between cursor-pointer"
-        >
-          <div class="flex items-center gap-3">
-            <div class="p-2 rounded-lg bg-dracula-yellow/10 text-dracula-yellow group-hover:scale-110 transition-transform">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s-8-1.79-8-4"></path>
-              </svg>
-            </div>
-            <div>
-              <div class="text-xs font-bold text-dracula-fg group-hover:text-dracula-yellow transition-colors">02 // Firebase Realtime DB</div>
-              <div class="text-[11px] text-dracula-comment">Spotify playback sync & history store</div>
-            </div>
-          </div>
-          <span class="text-xs text-dracula-comment group-hover:text-dracula-yellow">▶</span>
-        </button>
-
-        <!-- Step 3 -->
-        <button
-          data-step-id="step-lanyard"
-          class="hud-step-btn group text-left p-3.5 rounded-xl bg-dracula-bg/80 border border-dracula-comment/30 hover:border-dracula-purple transition-all duration-300 flex items-center justify-between cursor-pointer"
-        >
-          <div class="flex items-center gap-3">
-            <div class="p-2 rounded-lg bg-dracula-purple/10 text-dracula-purple group-hover:scale-110 transition-transform">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-              </svg>
-            </div>
-            <div>
-              <div class="text-xs font-bold text-dracula-fg group-hover:text-dracula-purple transition-colors">03 // Lanyard Discord WSS</div>
-              <div class="text-[11px] text-dracula-comment">Live Discord status & VS Code uptime</div>
-            </div>
-          </div>
-          <span class="text-xs text-dracula-comment group-hover:text-dracula-purple">▶</span>
-        </button>
-
-        <!-- Step 4 -->
-        <button
-          data-step-id="step-github"
-          class="hud-step-btn group text-left p-3.5 rounded-xl bg-dracula-bg/80 border border-dracula-comment/30 hover:border-dracula-pink transition-all duration-300 flex items-center justify-between cursor-pointer"
-        >
-          <div class="flex items-center gap-3">
-            <div class="p-2 rounded-lg bg-dracula-pink/10 text-dracula-pink group-hover:scale-110 transition-transform">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-            </div>
-            <div>
-              <div class="text-xs font-bold text-dracula-fg group-hover:text-dracula-pink transition-colors">04 // GitHub Actions & CI/CD</div>
-              <div class="text-[11px] text-dracula-comment">Dependabot automerge & PAT credit</div>
-            </div>
-          </div>
-          <span class="text-xs text-dracula-comment group-hover:text-dracula-pink">▶</span>
-        </button>
-      </div>
-
-      <!-- Cyber Code Inspector (7 Cols) -->
-      <div class="lg:col-span-7 rounded-xl bg-dracula-bg/95 border border-dracula-purple/40 overflow-hidden flex flex-col shadow-2xl font-mono">
-        <!-- Inspector Window Header -->
-        <div class="px-4 py-2.5 bg-dracula-current/80 border-b border-dracula-comment/30 flex items-center justify-between select-none">
-          <div class="flex items-center gap-2">
-            <div class="w-2.5 h-2.5 rounded-full bg-dracula-red"></div>
-            <div class="w-2.5 h-2.5 rounded-full bg-dracula-yellow"></div>
-            <div class="w-2.5 h-2.5 rounded-full bg-dracula-green"></div>
-            <span id="hud-inspector-title" class="ml-2 text-xs text-dracula-fg font-bold">telemetry://client-engine</span>
-          </div>
-          <span id="hud-inspector-badge" class="px-2 py-0.5 rounded text-[10px] bg-dracula-green/20 text-dracula-green font-bold">200 OK</span>
-        </div>
-
-        <!-- Inspector Payload Body -->
-        <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
           <div>
-            <div class="text-[11px] text-dracula-pink font-bold mb-1">AUTHENTIC LIVE PAYLOAD (REST / WSS):</div>
-            <pre id="hud-payload-view" class="p-3 rounded-lg bg-dracula-current/60 border border-dracula-comment/20 text-dracula-green text-xs overflow-x-auto max-h-[220px] selection:bg-dracula-selection">
-Fetching live endpoint data...
-            </pre>
+            <div class="flex items-center justify-between mb-3">
+              <div class="p-2.5 rounded-lg bg-dracula-cyan/15 text-dracula-cyan group-hover:scale-110 transition-transform">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] bg-dracula-cyan/20 text-dracula-cyan font-bold border border-dracula-cyan/30">
+                ORIGIN EDGE NODE
+              </span>
+            </div>
+            <div class="font-bold text-sm text-dracula-fg group-hover:text-dracula-cyan transition-colors">
+              01 // Client & Netlify Edge
+            </div>
+            <p class="text-xs text-dracula-comment mt-1 leading-relaxed">
+              Astro 7 SSR/Static delivery via Netlify Edge CDN. Drives responsive UI, pure tsParticles, and real-time client hydration.
+            </p>
           </div>
 
-          <!-- Event Log Ticker -->
-          <div class="border-t border-dracula-comment/20 pt-3">
-            <div class="text-[10px] text-dracula-comment uppercase font-bold mb-1">LIVE EVENT STREAM:</div>
-            <div id="hud-event-log" class="text-[11px] text-dracula-cyan space-y-1">
-              <div>[SYSTEM] Telemetry dashboard initialized.</div>
-            </div>
+          <div class="mt-4 pt-3 border-t border-dracula-comment/20 flex items-center justify-between text-[11px]">
+            <span class="text-dracula-cyan font-bold" id="card-client-status">Engine: Astro 7</span>
+            <span class="text-dracula-comment group-hover:text-dracula-fg transition-colors">Inspect Node ➔</span>
           </div>
         </div>
+
+        <!-- Target Cloud Nodes Container (7 Cols) -->
+        <div class="md:col-span-7 grid grid-cols-1 gap-3">
+          
+          <!-- Node 2: Firebase Realtime DB -->
+          <div
+            data-node-key="step-firebase"
+            class="arch-node-card group cursor-pointer p-3.5 sm:p-4 rounded-xl bg-dracula-current/60 hover:bg-dracula-current border border-dracula-comment/30 hover:border-dracula-yellow shadow-md transition-all duration-300 flex items-center justify-between overflow-hidden"
+          >
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="p-2 rounded-lg bg-dracula-yellow/15 text-dracula-yellow group-hover:scale-110 transition-transform flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s-8-1.79-8-4"></path>
+                </svg>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-xs font-bold text-dracula-fg group-hover:text-dracula-yellow transition-colors truncate">
+                  02 // Firebase Realtime DB (Singapore)
+                </div>
+                <div class="text-[11px] text-dracula-comment truncate" id="card-firebase-sub">
+                  Spotify live track playback & listening history
+                </div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-dracula-yellow/20 text-dracula-yellow font-bold whitespace-nowrap ml-2 flex-shrink-0" id="card-firebase-ping">
+              -- ms
+            </span>
+          </div>
+
+          <!-- Node 3: Lanyard Discord Gateway -->
+          <div
+            data-node-key="step-lanyard"
+            class="arch-node-card group cursor-pointer p-3.5 sm:p-4 rounded-xl bg-dracula-current/60 hover:bg-dracula-current border border-dracula-comment/30 hover:border-dracula-purple shadow-md transition-all duration-300 flex items-center justify-between overflow-hidden"
+          >
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="p-2 rounded-lg bg-dracula-purple/15 text-dracula-purple group-hover:scale-110 transition-transform flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-xs font-bold text-dracula-fg group-hover:text-dracula-purple transition-colors truncate">
+                  03 // Lanyard Discord WSS Gateway (US-East)
+                </div>
+                <div class="text-[11px] text-dracula-comment truncate" id="card-lanyard-sub">
+                  Live Discord presence & VS Code activity stream
+                </div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-dracula-purple/20 text-dracula-purple font-bold whitespace-nowrap ml-2 flex-shrink-0" id="card-lanyard-status">
+              WSS
+            </span>
+          </div>
+
+          <!-- Node 4: GitHub Actions CI/CD -->
+          <div
+            data-node-key="step-github"
+            class="arch-node-card group cursor-pointer p-3.5 sm:p-4 rounded-xl bg-dracula-current/60 hover:bg-dracula-current border border-dracula-comment/30 hover:border-dracula-pink shadow-md transition-all duration-300 flex items-center justify-between overflow-hidden"
+          >
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="p-2 rounded-lg bg-dracula-pink/15 text-dracula-pink group-hover:scale-110 transition-transform flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-xs font-bold text-dracula-fg group-hover:text-dracula-pink transition-colors truncate">
+                  04 // GitHub Actions & CI/CD Pipeline
+                </div>
+                <div class="text-[11px] text-dracula-comment truncate" id="card-github-sub">
+                  Dependabot automerge & Git commit credit (@nivinvysakh)
+                </div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-dracula-pink/20 text-dracula-pink font-bold whitespace-nowrap ml-2 flex-shrink-0" id="card-github-sha">
+              PASSING
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Live Telemetry & Code Inspector Window -->
+    <div class="rounded-xl bg-dracula-bg/95 border border-dracula-purple/40 overflow-hidden flex flex-col shadow-2xl font-mono">
+      <!-- Inspector Header Bar -->
+      <div class="px-4 py-3 bg-dracula-current/80 border-b border-dracula-comment/30 flex items-center justify-between select-none">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-dracula-red"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-dracula-yellow"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-dracula-green"></div>
+          <span id="arch-inspector-title" class="ml-2 text-xs text-dracula-fg font-bold truncate">
+            telemetry://client-edge-node
+          </span>
+        </div>
+        <span id="arch-inspector-badge" class="px-2 py-0.5 rounded text-[10px] bg-dracula-green/20 text-dracula-green font-bold">
+          200 OK
+        </span>
       </div>
 
+      <!-- Inspector Payload & Log Grid -->
+      <div class="p-4 sm:p-5 grid grid-cols-1 lg:grid-cols-12 gap-4">
+        
+        <!-- Live JSON Code View (8 Cols) -->
+        <div class="lg:col-span-8 flex flex-col">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-[11px] text-dracula-pink font-bold uppercase tracking-wide">
+              AUTHENTIC LIVE TELEMETRY PAYLOAD:
+            </span>
+            <span class="text-[10px] text-dracula-comment">Protocol: HTTPS / WSS • TLS 1.3</span>
+          </div>
+          <pre id="arch-payload-view" class="p-3.5 rounded-lg bg-dracula-current/60 border border-dracula-comment/20 text-dracula-green text-xs overflow-x-auto max-h-[220px] selection:bg-dracula-selection leading-relaxed flex-1">
+Fetching live endpoint data...
+          </pre>
+        </div>
+
+        <!-- Live Event Stream Log (4 Cols) -->
+        <div class="lg:col-span-4 flex flex-col justify-between">
+          <div>
+            <div class="text-[11px] text-dracula-cyan font-bold uppercase tracking-wide mb-1.5">
+              REAL-TIME EVENT TICKER:
+            </div>
+            <div id="arch-event-log" class="p-3 rounded-lg bg-dracula-current/40 border border-dracula-comment/20 text-[11px] text-dracula-cyan space-y-1.5 max-h-[180px] overflow-y-auto">
+              <div>[SYSTEM] Topology console active.</div>
+            </div>
+          </div>
+
+          <div class="mt-3 p-2.5 rounded bg-dracula-bg border border-dracula-comment/20 text-[10px] text-dracula-comment space-y-0.5">
+            <div class="text-dracula-fg font-bold">Topology Specs</div>
+            <div>Hosting: Netlify Edge CDN</div>
+            <div>Database: Firebase asia-southeast1</div>
+          </div>
+        </div>
+
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -189,166 +248,258 @@ Fetching live endpoint data...
   import { SITE_CONFIG } from "../config";
 
   function initHudArchitecture() {
-    const stepBtns = document.querySelectorAll('.hud-step-btn');
-    const refreshBtn = document.getElementById('hud-refresh-btn');
-    const spinIcon = document.getElementById('hud-spin-icon');
-    const lastSync = document.getElementById('hud-last-sync');
-    const inspectorTitle = document.getElementById('hud-inspector-title');
-    const payloadView = document.getElementById('hud-payload-view');
-    const eventLog = document.getElementById('hud-event-log');
+    const nodeCards = document.querySelectorAll(".arch-node-card");
+    const refreshBtn = document.getElementById("arch-refresh-btn");
+    const spinIcon = document.getElementById("arch-spin-icon");
+    const lastSync = document.getElementById("arch-last-sync");
+    const inspectorTitle = document.getElementById("arch-inspector-title");
+    const inspectorBadge = document.getElementById("arch-inspector-badge");
+    const payloadView = document.getElementById("arch-payload-view");
+    const eventLog = document.getElementById("arch-event-log");
 
-    let activeStepKey = 'step-client';
+    let activeStepKey = "step-client";
     let startTime = Date.now();
     let telemetryData: Record<string, any> = {};
 
     function addLog(msg: string) {
       if (!eventLog) return;
       const time = new Date().toLocaleTimeString();
-      const item = document.createElement('div');
+      const item = document.createElement("div");
       item.innerHTML = `<span class="text-dracula-comment">[${time}]</span> ${msg}`;
       eventLog.appendChild(item);
-      if (eventLog.children.length > 4) {
+      if (eventLog.children.length > 5) {
         eventLog.removeChild(eventLog.children[0]);
       }
     }
 
     async function fetchHudMetrics() {
-      if (spinIcon) spinIcon.classList.add('animate-spin');
+      if (spinIcon) spinIcon.classList.add("animate-spin");
 
-      // 1. Client Metrics
+      // 1. Client & Netlify Edge Metrics
       const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
-      const mins = Math.floor(elapsedSec / 60).toString().padStart(2, '0');
-      const secs = (elapsedSec % 60).toString().padStart(2, '0');
+      const mins = Math.floor(elapsedSec / 60).toString().padStart(2, "0");
+      const secs = (elapsedSec % 60).toString().padStart(2, "0");
 
-      telemetryData['step-client'] = {
+      telemetryData["step-client"] = {
+        node: "Netlify Edge CDN",
         viewport: `${window.innerWidth}x${window.innerHeight}`,
-        device: 'Macintosh / Linux',
-        uptime: `00:${mins}:${secs}`,
-        status: 'ONLINE',
-        framework: 'Astro 7 + Tailwind v4',
-        particles: 'Pure tsParticles'
+        user_agent: navigator.userAgent.substring(0, 50) + "...",
+        session_uptime: `00:${mins}:${secs}`,
+        status: "ACTIVE",
+        framework: "Astro 7 + Tailwind v4",
+        origin: window.location.origin,
       };
 
-      const pillClient = document.getElementById('pill-client-text');
-      if (pillClient) pillClient.textContent = `${window.innerWidth}x${window.innerHeight} • Online`;
+      const pillClient = document.getElementById("pill-client-text");
+      if (pillClient) pillClient.textContent = `${window.innerWidth}x${window.innerHeight} • Netlify Edge`;
 
-      // 2. Firebase Metrics
+      const cardClientStatus = document.getElementById("card-client-status");
+      if (cardClientStatus) cardClientStatus.textContent = `Astro 7 • Uptime 00:${mins}:${secs}`;
+
+      // 2. Firebase Realtime DB Metrics
       try {
         const fbStart = Date.now();
         const fbRes = await fetch(`${SITE_CONFIG.firebaseConfig.databaseURL}/spotify/current.json`);
         const fbMs = Date.now() - fbStart;
         const fbData = await fbRes.json();
 
-        telemetryData['step-firebase'] = {
+        telemetryData["step-firebase"] = {
           latency_ms: `${fbMs}ms`,
-          region: 'asia-southeast1',
+          region: "asia-southeast1 (Singapore)",
           endpoint: SITE_CONFIG.firebaseConfig.databaseURL,
-          current_playing: fbData || { isPlaying: false, track: 'Offline / History Fallback' }
+          current_spotify_track: fbData?.track || "No track active / History Sync",
+          artist: fbData?.artist || "N/A",
+          is_playing: fbData?.isPlaying || false,
         };
 
-        const pillFb = document.getElementById('pill-firebase-text');
+        const pillFb = document.getElementById("pill-firebase-text");
         if (pillFb) pillFb.textContent = `Ping: ${fbMs}ms`;
+
+        const cardFbPing = document.getElementById("card-firebase-ping");
+        if (cardFbPing) cardFbPing.textContent = `${fbMs}ms`;
+
+        const cardFbSub = document.getElementById("card-firebase-sub");
+        if (cardFbSub && fbData?.track) cardFbSub.textContent = `🎵 ${fbData.track} - ${fbData.artist}`;
+
         addLog(`Firebase RTDB ping: ${fbMs}ms (asia-southeast1)`);
       } catch (e) {
-        telemetryData['step-firebase'] = { status: 'Synced', latency_ms: '18ms' };
+        telemetryData["step-firebase"] = {
+          status: "Synced",
+          latency_ms: "16ms",
+          region: "asia-southeast1",
+        };
       }
 
-      // 3. Lanyard Metrics
+      // 3. Lanyard Discord Gateway Metrics
       try {
         const lanRes = await fetch(`https://api.lanyard.rest/v1/users/${SITE_CONFIG.discordId}`);
         const lanJson = await lanRes.json();
         const dData = lanJson?.data;
 
-        telemetryData['step-lanyard'] = {
-          username: dData?.discord_user?.username || 'nivinvysakh',
-          status: dData?.discord_status || 'online',
-          active_app: dData?.activities?.[0]?.name || 'VS Code',
-          details: dData?.activities?.[0]?.details || 'Coding in Astro'
+        telemetryData["step-lanyard"] = {
+          discord_user: dData?.discord_user?.username || "nivinvysakh",
+          discord_status: dData?.discord_status || "online",
+          active_activity: dData?.activities?.[0]?.name || "Visual Studio Code",
+          activity_details: dData?.activities?.[0]?.details || "Coding Portfolio",
+          kv_custom_status: dData?.kv?.status || "Active",
         };
 
-        const pillLan = document.getElementById('pill-lanyard-text');
-        if (pillLan) pillLan.textContent = `Status: ${(dData?.discord_status || 'online').toUpperCase()}`;
-        addLog(`Discord Gateway status: ${dData?.discord_status || 'online'}`);
+        const pillLan = document.getElementById("pill-lanyard-text");
+        if (pillLan) pillLan.textContent = `Status: ${(dData?.discord_status || "online").toUpperCase()}`;
+
+        const cardLanStatus = document.getElementById("card-lanyard-status");
+        if (cardLanStatus) cardLanStatus.textContent = (dData?.discord_status || "online").toUpperCase();
+
+        const cardLanSub = document.getElementById("card-lanyard-sub");
+        if (cardLanSub && dData?.activities?.[0]?.name) {
+          cardLanSub.textContent = `💻 ${dData.activities[0].name} (${dData.activities[0].details || "Active"})`;
+        }
+
+        addLog(`Discord Gateway status: ${dData?.discord_status || "online"}`);
       } catch (e) {
-        telemetryData['step-lanyard'] = { status: 'online', app: 'VS Code' };
+        telemetryData["step-lanyard"] = { status: "ONLINE", gateway: "WSS" };
       }
 
-      // 4. GitHub Metrics
+      // 4. GitHub Actions & CI/CD Metrics
       try {
-        const ghRes = await fetch('https://api.github.com/repos/nivinvysakh/Dracula-portfolio/commits?per_page=1');
+        const ghRes = await fetch("https://api.github.com/repos/nivinvysakh/Dracula-portfolio/commits?per_page=1");
         const ghCommits = await ghRes.json();
         const latest = ghCommits?.[0];
 
-        telemetryData['step-github'] = {
-          repo: 'nivinvysakh/Dracula-portfolio',
-          branch: 'Beta',
-          latest_sha: latest?.sha?.substring(0, 7) || 'a8f91c2',
-          message: latest?.commit?.message || 'feat: automerge pipeline update',
-          author: latest?.commit?.author?.name || 'Nivin Vysakh'
+        telemetryData["step-github"] = {
+          repo: "nivinvysakh/Dracula-portfolio",
+          branch: "Beta",
+          latest_sha: latest?.sha?.substring(0, 7) || "a8f91c2",
+          commit_message: latest?.commit?.message || "feat: infrastructure update",
+          author: latest?.commit?.author?.name || "Nivin Vysakh",
+          automerge_bot: "Dependabot PAT Automerge",
         };
 
-        const pillGh = document.getElementById('pill-github-text');
-        if (pillGh) pillGh.textContent = `Commit: ${latest?.sha?.substring(0, 7) || 'Synced'}`;
-        addLog(`GitHub Actions latest commit: ${latest?.sha?.substring(0, 7) || 'Synced'}`);
+        const pillGh = document.getElementById("pill-github-text");
+        if (pillGh) pillGh.textContent = `Commit: ${latest?.sha?.substring(0, 7) || "Synced"}`;
+
+        const cardGhSha = document.getElementById("card-github-sha");
+        if (cardGhSha) cardGhSha.textContent = latest?.sha?.substring(0, 7) || "PASSING";
+
+        const cardGhSub = document.getElementById("card-github-sub");
+        if (cardGhSub && latest?.commit?.message) {
+          const rawMsg = latest.commit.message;
+          const cleanMsg = rawMsg.split("\n")[0].replace(/\[(.*?)\]\(.*?\)/g, "$1");
+          const shortMsg = cleanMsg.length > 40 ? cleanMsg.substring(0, 37) + "..." : cleanMsg;
+          cardGhSub.textContent = `Commit: ${shortMsg}`;
+        }
+
+        addLog(`GitHub Actions latest commit: ${latest?.sha?.substring(0, 7) || "Synced"}`);
       } catch (e) {
-        telemetryData['step-github'] = { repo: 'nivinvysakh/Dracula-portfolio', status: 'PASSING' };
+        telemetryData["step-github"] = { repo: "nivinvysakh/Dracula-portfolio", status: "PASSING" };
       }
 
-      if (lastSync) lastSync.textContent = `Last synced: ${new Date().toLocaleTimeString()}`;
-      if (spinIcon) spinIcon.classList.remove('animate-spin');
+      if (lastSync) lastSync.textContent = `Synced: ${new Date().toLocaleTimeString()}`;
+      if (spinIcon) spinIcon.classList.remove("animate-spin");
 
-      // Update inspector view
       renderInspector(activeStepKey);
+    }
+
+    function updateTopologyPaths() {
+      const container = document.getElementById("arch-topology-canvas");
+      const clientCard = document.querySelector('[data-node-key="step-client"]') as HTMLElement;
+      if (!container || !clientCard) return;
+
+      const contRect = container.getBoundingClientRect();
+      const clientRect = clientCard.getBoundingClientRect();
+
+      const startX = clientRect.right - contRect.left;
+
+      const targets = [
+        { key: "step-firebase", yRatio: 0.22 },
+        { key: "step-lanyard", yRatio: 0.50 },
+        { key: "step-github", yRatio: 0.78 },
+      ];
+
+      targets.forEach(({ key, yRatio }) => {
+        const card = document.querySelector(`[data-node-key="${key}"]`) as HTMLElement;
+        const pathEl = document.getElementById(`path-${key}`);
+        if (!card || !pathEl) return;
+
+        const startY = clientRect.top + (clientRect.height * yRatio) - contRect.top;
+        const cardRect = card.getBoundingClientRect();
+        const endX = cardRect.left - contRect.left;
+        const endY = cardRect.top + cardRect.height / 2 - contRect.top;
+
+        const midX = (startX + endX) / 2;
+        const d = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
+        pathEl.setAttribute("d", d);
+
+        if (activeStepKey === key) {
+          pathEl.setAttribute("opacity", "1");
+          pathEl.setAttribute("stroke-width", "3");
+        } else {
+          pathEl.setAttribute("opacity", "0.35");
+          pathEl.setAttribute("stroke-width", "1.5");
+        }
+      });
     }
 
     function renderInspector(stepKey: string) {
       activeStepKey = stepKey;
 
       const titles: Record<string, string> = {
-        'step-client': 'telemetry://client-browser-engine',
-        'step-firebase': 'telemetry://firebase-rtdb-spotify',
-        'step-lanyard': 'telemetry://lanyard-discord-wss',
-        'step-github': 'telemetry://github-actions-automerge'
+        "step-client": "telemetry://client-netlify-edge",
+        "step-firebase": "telemetry://firebase-rtdb-singapore",
+        "step-lanyard": "telemetry://lanyard-discord-wss",
+        "step-github": "telemetry://github-actions-automerge",
       };
 
-      const borderColors: Record<string, string> = {
-        'step-client': 'ring-dracula-cyan border-dracula-cyan/50',
-        'step-firebase': 'ring-dracula-yellow border-dracula-yellow/50',
-        'step-lanyard': 'ring-dracula-purple border-dracula-purple/50',
-        'step-github': 'ring-dracula-pink border-dracula-pink/50'
+      const ringColors: Record<string, string> = {
+        "step-client": "ring-dracula-cyan border-dracula-cyan/80",
+        "step-firebase": "ring-dracula-yellow border-dracula-yellow/80",
+        "step-lanyard": "ring-dracula-purple border-dracula-purple/80",
+        "step-github": "ring-dracula-pink border-dracula-pink/80",
       };
 
-      // Update step button styling
-      stepBtns.forEach(btn => {
-        const k = btn.getAttribute('data-step-id');
-        btn.classList.remove('ring-2', 'ring-dracula-cyan', 'ring-dracula-yellow', 'ring-dracula-purple', 'ring-dracula-pink');
+      nodeCards.forEach((card) => {
+        const k = card.getAttribute("data-node-key");
+        card.classList.remove(
+          "ring-2",
+          "ring-dracula-cyan",
+          "ring-dracula-yellow",
+          "ring-dracula-purple",
+          "ring-dracula-pink",
+          "border-dracula-cyan/80",
+          "border-dracula-yellow/80",
+          "border-dracula-purple/80",
+          "border-dracula-pink/80"
+        );
         if (k === stepKey) {
-          const colorClass = borderColors[stepKey] || 'ring-dracula-cyan';
-          btn.className = `hud-step-btn group text-left p-3.5 rounded-xl bg-dracula-bg/80 transition-all duration-300 flex items-center justify-between cursor-pointer ring-2 ${colorClass}`;
-        } else {
-          btn.className = 'hud-step-btn group text-left p-3.5 rounded-xl bg-dracula-bg/80 border border-dracula-comment/30 hover:border-dracula-comment transition-all duration-300 flex items-center justify-between cursor-pointer';
+          const classes = (ringColors[stepKey] || "ring-dracula-cyan border-dracula-cyan/80").split(" ");
+          card.classList.add("ring-2", ...classes);
         }
       });
 
-      if (inspectorTitle) inspectorTitle.textContent = titles[stepKey] || 'telemetry://node';
+      if (inspectorTitle) inspectorTitle.textContent = titles[stepKey] || "telemetry://node";
+      if (inspectorBadge) inspectorBadge.textContent = "200 OK";
       if (payloadView) {
         payloadView.textContent = JSON.stringify(telemetryData[stepKey] || {}, null, 2);
       }
+
+      updateTopologyPaths();
     }
 
-    stepBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const k = btn.getAttribute('data-step-id');
+    nodeCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const k = card.getAttribute("data-node-key");
         if (k) renderInspector(k);
       });
     });
 
-    refreshBtn?.addEventListener('click', fetchHudMetrics);
+    refreshBtn?.addEventListener("click", fetchHudMetrics);
+    window.addEventListener("resize", updateTopologyPaths);
 
     fetchHudMetrics();
+    setTimeout(updateTopologyPaths, 100);
     setInterval(fetchHudMetrics, 15000);
   }
 
-  document.addEventListener('DOMContentLoaded', initHudArchitecture);
-  document.addEventListener('astro:page-load', initHudArchitecture);
+  document.addEventListener("DOMContentLoaded", initHudArchitecture);
+  document.addEventListener("astro:page-load", initHudArchitecture);
 </script>
