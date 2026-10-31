@@ -13,7 +13,7 @@
     "@astrojs/check": "^0.9.12",
     "@tailwindcss/vite": "^4.3.3",
     "@tsparticles/astro": "^4.5.0",
-    "@tsparticles/engine": "^4.3.2",
+    "@tsparticles/engine": "^4.5.0",
     "@tsparticles/slim": "^4.4.0",
     "astro": "^7.4.4",
     "firebase": "^13.1.0",
