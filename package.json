@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
-    "@tailwindcss/vite": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.4",
     "@tsparticles/astro": "^4.5.0",
     "@tsparticles/engine": "^4.3.2",
     "@tsparticles/slim": "^4.5.0",
